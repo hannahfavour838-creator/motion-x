@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+/* ──────────────────────────────────────────────────────────────
+   MOTION X — design tokens
+   Obsidian foundation · metallic silver typography · restrained electric blue
+   ────────────────────────────────────────────────────────────── */
+@theme {
+  --color-obsidian: #050607;
+  --color-ink: #090b0f;
+  --color-charcoal: #11141a;
+  --color-surface: #191d24;
+  --color-surface-2: #20252e;
+  --color-silver: #c6cbd3;
+  --color-white: #f7f8fa;
+  --color-muted: #969da8;
+  --color-dim: #6b727d;
+  --color-electric: #5c8dff;
+  --color-glow: #234a9c;
+  --color-line: rgb(198 203 211 / 0.12);
+  --color-line-strong: rgb(198 203 211 / 0.24);
+  --color-success: #7fd1ae;
+  --color-warning: #e8c273;
+  --color-danger: #f08a8a;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-archivo), var(--font-geist-sans), ui-sans-serif, sans-serif;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-precise: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--letter-spacing: 0.28em;
+
+  --breakpoint-xs: 26rem;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-obsidian);
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    background: var(--color-obsidian);
+    color: var(--color-white);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--color-glow);
+    color: var(--color-white);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  a,
+  button,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+  }
+  img {
+    max-width: 100%;
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  /* Expressive, expanded display face for editorial headings */
+  .font-display {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 125;
+    font-stretch: 125%;
+    letter-spacing: -0.015em;
+  }
+  .font-display-condensed {
+    font-family: var(--font-display);
+    font-variation-settings: "wdth" 80;
+    font-stretch: 80%;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .text-metal {
+    background: linear-gradient(180deg, #ffffff 0%, #d9dde3 42%, #8f97a3 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hairline {
+    border-color: var(--color-line);
+  }
+  .container-x {
+    width: 100%;
+    max-width: 92rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-x {
+      padding-inline: 2.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container-x {
+      padding-inline: 4rem;
+    }
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.6'/></svg>");
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .skeleton {
+    background: linear-gradient(90deg, var(--color-charcoal) 0%, var(--color-surface) 50%, var(--color-charcoal) 100%);
+    background-size: 200% 100%;
+    animation: mx-shimmer 1.6s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      animation: none;
+    }
+  }
+}
+
+@keyframes mx-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes mx-scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(220%);
+  }
+}
+
+@keyframes mx-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

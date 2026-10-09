@@ -1,0 +1,9 @@
+# Keep LF line endings on every platform (shell scripts break with CRLF).
+* text=auto eol=lf
+
+# Binary assets
+*.glb binary
+*.webp binary
+*.jpg binary
+*.png binary
+*.woff2 binary
