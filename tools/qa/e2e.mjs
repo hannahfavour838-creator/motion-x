@@ -131,9 +131,15 @@ await test("vehicle detail page: specs, gallery, noindex for demo", async () => 
   const robots = await page.locator('meta[name="robots"]').getAttribute("content");
   assert(/noindex/.test(robots ?? ""), `robots ${robots}`);
   assert(await page.locator('script[type="application/ld+json"]').count() === 0, "no structured data for demo listings");
-  assert(await page.getByText("Illustrative render — not a photograph of this vehicle").isVisible(), "illustrative label");
-  await page.getByRole("button", { name: "Next photo" }).click({ force: true });
-  assert(/2 \/ 2/.test(await page.getByText(/\d \/ \d/).first().innerText()), "gallery advanced");
+  assert(await page.getByText("Representative photo — not the vehicle listed").isVisible(), "representative-photo label");
+  const credit = page.locator('a[href^="https://commons.wikimedia.org/wiki/File:"]').first();
+  assert(await credit.isVisible(), "photo credit links to its Commons source");
+  assert(await page.locator('a[rel~="license"]').first().isVisible(), "licence link");
+  assert(/1 \/ 1/.test(await page.getByText(/\d \/ \d/).first().innerText()), "single representative photo");
+  await page.getByRole("button", { name: "View fullscreen" }).click();
+  await page.getByRole("dialog", { name: /fullscreen gallery/ }).waitFor();
+  await page.keyboard.press("Escape");
+  await page.getByRole("dialog", { name: /fullscreen gallery/ }).waitFor({ state: "detached" });
 });
 
 await test("enquiry form validates on the server and refuses demo listings honestly", async () => {

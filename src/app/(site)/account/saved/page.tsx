@@ -16,7 +16,7 @@ export default async function SavedPage() {
       {saved.length === 0 ? (
         <EmptyState title="Nothing saved yet" action={<ButtonLink href="/cars">Discover cars</ButtonLink>}>Tap the heart on any vehicle to keep it here.</EmptyState>
       ) : (
-        <ul className="grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">
           {saved.map((v) => <li key={v.id} className="bg-obsidian"><VehicleCard vehicle={v} /></li>)}
         </ul>
       )}

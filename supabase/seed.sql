@@ -90,339 +90,271 @@ values ('d0000000-0000-4000-8000-000000000001', 'de000000-0000-4000-8000-0000000
 
 A rear-engined sports coupé specified with sports exhaust, adaptive dampers and a full service record (illustrative).', 'active', true, true, true, '2026-10-06T09:12:00Z', '2026-10-06T09:12:00Z', '2026-10-06T09:12:00Z', '2026-10-06T09:12:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000001', '/renders/demo/0001-a.webp', 'Illustrative studio render representing a gt silver metallic 2021 Porsche 911', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000001', '/photos/demo/0001.webp', 'Silver Porsche 911 Carrera S (992 generation), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000001' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000001', '/renders/demo/0001-b.webp', 'Illustrative rear three-quarter render representing a 2021 Porsche 911', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000001' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000002', 'de000000-0000-4000-8000-000000000002', '2020-ferrari-f8-tributo-demo02', 'Ferrari', 'F8 Tributo', null, 2020, 1050000, 'AED', 'AE', 'Dubai', 'Dubai', 9800, 'km', 'used', 'coupe', 'dual_clutch', 'petrol', 'rwd', 'supercar', 'Rosso Corsa', 'Nero leather', '3.9 L twin-turbo V8', 710, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Mid-engined V8 berlinetta. GCC specification with carbon-fibre interior trim (illustrative).', 'active', true, true, false, '2026-10-05T15:40:00Z', '2026-10-05T15:40:00Z', '2026-10-05T15:40:00Z', '2026-10-05T15:40:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000002', '/renders/demo/0002-a.webp', 'Illustrative studio render representing a rosso corsa 2020 Ferrari F8 Tributo', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000002', '/photos/demo/0002.webp', 'Red Ferrari F8 Tributo on a display stand, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000002' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000002', '/renders/demo/0002-b.webp', 'Illustrative rear three-quarter render representing a 2020 Ferrari F8 Tributo', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000002' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000003', 'de000000-0000-4000-8000-000000000003', '2021-lamborghini-hurac-n-evo-demo03', 'Lamborghini', 'Huracán', 'EVO', 2021, 239000, 'EUR', 'DE', 'Bavaria', 'Munich', 11500, 'km', 'used', 'coupe', 'dual_clutch', 'petrol', 'awd', 'supercar', 'Verde metallic', 'Nero Ade', '5.2 L naturally aspirated V10', 640, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000003', 'de000000-0000-4000-8000-000000000003', '2021-lamborghini-hurac-n-evo-demo03', 'Lamborghini', 'Huracán', 'EVO', 2021, 239000, 'EUR', 'DE', 'Bavaria', 'Munich', 11500, 'km', 'used', 'coupe', 'dual_clutch', 'petrol', 'awd', 'supercar', 'Orange metallic', 'Nero Ade', '5.2 L naturally aspirated V10', 640, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Naturally aspirated V10 with all-wheel drive and rear-wheel steering (illustrative).', 'active', true, true, false, '2026-10-04T10:05:00Z', '2026-10-04T10:05:00Z', '2026-10-04T10:05:00Z', '2026-10-04T10:05:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000003', '/renders/demo/0003-a.webp', 'Illustrative studio render representing a verde metallic 2021 Lamborghini Huracán', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000003', '/photos/demo/0003.webp', 'Orange Lamborghini Huracán EVO at the Geneva motor show, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000003' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000003', '/renders/demo/0003-b.webp', 'Illustrative rear three-quarter render representing a 2021 Lamborghini Huracán', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000003' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000004', 'de000000-0000-4000-8000-000000000004', '2019-mclaren-720s-performance-demo04', 'McLaren', '720S', 'Performance', 2019, 239900, 'USD', 'US', 'California', 'Los Angeles', 8900, 'mi', 'used', 'coupe', 'dual_clutch', 'petrol', 'rwd', 'supercar', 'Papaya orange', 'Carbon black Alcantara', '4.0 L twin-turbo V8', 710, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000004', 'de000000-0000-4000-8000-000000000004', '2019-mclaren-720s-performance-demo04', 'McLaren', '720S', 'Performance', 2019, 239900, 'USD', 'US', 'California', 'Los Angeles', 8900, 'mi', 'used', 'coupe', 'dual_clutch', 'petrol', 'rwd', 'supercar', 'Azores Orange', 'Carbon black Alcantara', '4.0 L twin-turbo V8', 710, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Carbon-tub supercar with dihedral doors and track telemetry (illustrative).', 'active', true, false, false, '2026-10-03T18:22:00Z', '2026-10-03T18:22:00Z', '2026-10-03T18:22:00Z', '2026-10-03T18:22:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000004', '/renders/demo/0004-a.webp', 'Illustrative studio render representing a papaya orange 2019 McLaren 720S', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000004', '/photos/demo/0004.webp', 'Azores Orange McLaren 720S, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000004' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000004', '/renders/demo/0004-b.webp', 'Illustrative rear three-quarter render representing a 2019 McLaren 720S', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000004' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000005', 'de000000-0000-4000-8000-000000000001', '2022-rolls-royce-ghost-demo05', 'Rolls-Royce', 'Ghost', null, 2022, 265000, 'GBP', 'GB', 'Greater London', 'London', 3100, 'mi', 'used', 'sedan', 'automatic', 'petrol', 'awd', 'luxury', 'Arctic White', 'Seashell leather', '6.75 L twin-turbo V12', 571, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000005', 'de000000-0000-4000-8000-000000000001', '2022-rolls-royce-ghost-demo05', 'Rolls-Royce', 'Ghost', null, 2022, 265000, 'GBP', 'GB', 'Greater London', 'London', 3100, 'mi', 'used', 'sedan', 'automatic', 'petrol', 'awd', 'luxury', 'Silver', 'Seashell leather', '6.75 L twin-turbo V12', 571, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Flagship saloon with starlight headliner and rear theatre configuration (illustrative).', 'active', true, true, true, '2026-10-02T11:00:00Z', '2026-10-02T11:00:00Z', '2026-10-02T11:00:00Z', '2026-10-02T11:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000005', '/renders/demo/0005-a.webp', 'Illustrative studio render representing a arctic white 2022 Rolls-Royce Ghost', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000005', '/photos/demo/0005.webp', 'Silver second-generation Rolls-Royce Ghost, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000005' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000005', '/renders/demo/0005-b.webp', 'Illustrative rear three-quarter render representing a 2022 Rolls-Royce Ghost', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000005' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000006', 'de000000-0000-4000-8000-000000000002', '2020-bentley-continental-gt-v8-demo06', 'Bentley', 'Continental GT', 'V8', 2020, 695000, 'AED', 'AE', 'Dubai', 'Dubai', 21500, 'km', 'used', 'coupe', 'dual_clutch', 'petrol', 'awd', 'luxury', 'Beluga black', 'Linen leather', '4.0 L twin-turbo V8', 550, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Hand-finished grand tourer with rotating dashboard display (illustrative).', 'active', true, false, false, '2026-09-30T08:30:00Z', '2026-09-30T08:30:00Z', '2026-09-30T08:30:00Z', '2026-09-30T08:30:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000006', '/renders/demo/0006-a.webp', 'Illustrative studio render representing a beluga black 2020 Bentley Continental GT', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000006', '/photos/demo/0006.webp', 'Black third-generation Bentley Continental GT parked on a city street, front view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000006' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000006', '/renders/demo/0006-b.webp', 'Illustrative rear three-quarter render representing a 2020 Bentley Continental GT', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000006' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000007', 'de000000-0000-4000-8000-000000000003', '2023-mercedes-benz-s-class-s-580-4matic-demo07', 'Mercedes-Benz', 'S-Class', 'S 580 4MATIC', 2023, 129900, 'EUR', 'DE', 'Bavaria', 'Munich', 18000, 'km', 'used', 'sedan', 'automatic', 'petrol', 'awd', 'luxury', 'Obsidian black metallic', 'Macchiato beige', '4.0 L V8 mild hybrid', 503, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Long-wheelbase luxury saloon with rear-axle steering and executive rear seating (illustrative).', 'active', true, false, true, '2026-09-29T13:15:00Z', '2026-09-29T13:15:00Z', '2026-09-29T13:15:00Z', '2026-09-29T13:15:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000007', '/renders/demo/0007-a.webp', 'Illustrative studio render representing a obsidian black metallic 2023 Mercedes-Benz S-Class', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000007', '/photos/demo/0007.webp', 'Black Mercedes-Benz S-Class (W223) saloon, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000007' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000007', '/renders/demo/0007-b.webp', 'Illustrative rear three-quarter render representing a 2023 Mercedes-Benz S-Class', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000007' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000008', 'de000000-0000-4000-8000-000000000013', '2019-aston-martin-db11-v8-demo08', 'Aston Martin', 'DB11', 'V8', 2019, 89950, 'GBP', 'GB', 'Greater Manchester', 'Manchester', 24800, 'mi', 'used', 'coupe', 'automatic', 'petrol', 'rwd', 'luxury', 'Magnetic Silver', 'Obsidian black', '4.0 L twin-turbo V8', 510, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Front-engined 2+2 grand tourer, two private owners (illustrative).', 'active', true, false, false, '2026-09-28T19:02:00Z', '2026-09-28T19:02:00Z', '2026-09-28T19:02:00Z', '2026-09-28T19:02:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000008', '/renders/demo/0008-a.webp', 'Illustrative studio render representing a magnetic silver 2019 Aston Martin DB11', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000008', '/photos/demo/0008.webp', 'Silver Aston Martin DB11 V8, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000008' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000008', '/renders/demo/0008-b.webp', 'Illustrative rear three-quarter render representing a 2019 Aston Martin DB11', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000008' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000009', 'de000000-0000-4000-8000-000000000011', '2022-bmw-m3-competition-xdrive-demo09', 'BMW', 'M3', 'Competition xDrive', 2022, 84500, 'EUR', 'FR', 'Île-de-France', 'Paris', 26000, 'km', 'used', 'sedan', 'automatic', 'petrol', 'awd', 'performance', 'Isle of Man Green', 'Black/Yellow leather', '3.0 L twin-turbo straight-six', 510, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000009', 'de000000-0000-4000-8000-000000000011', '2022-bmw-m3-competition-xdrive-demo09', 'BMW', 'M3', 'Competition xDrive', 2022, 84500, 'EUR', 'FR', 'Île-de-France', 'Paris', 26000, 'km', 'used', 'sedan', 'automatic', 'petrol', 'awd', 'performance', 'Grey metallic', 'Black/Yellow leather', '3.0 L twin-turbo straight-six', 510, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 High-performance compact saloon with carbon bucket seats (illustrative).', 'active', true, false, false, '2026-09-27T07:45:00Z', '2026-09-27T07:45:00Z', '2026-09-27T07:45:00Z', '2026-09-27T07:45:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000009', '/renders/demo/0009-a.webp', 'Illustrative studio render representing a isle of man green 2022 BMW M3', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000009', '/photos/demo/0009.webp', 'Grey BMW M3 Competition (G80) saloon, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000009' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000009', '/renders/demo/0009-b.webp', 'Illustrative rear three-quarter render representing a 2022 BMW M3', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000009' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000010', 'de000000-0000-4000-8000-000000000003', '2021-audi-rs-6-avant-demo10', 'Audi', 'RS 6 Avant', null, 2021, 109000, 'EUR', 'DE', 'Bavaria', 'Munich', 38000, 'km', 'used', 'estate', 'automatic', 'petrol', 'awd', 'performance', 'Nardo Grey', 'Black Valcona leather', '4.0 L twin-turbo V8 mild hybrid', 600, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 High-performance estate with dynamic package and ceramic brakes (illustrative).', 'active', true, false, false, '2026-09-26T16:10:00Z', '2026-09-26T16:10:00Z', '2026-09-26T16:10:00Z', '2026-09-26T16:10:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000010', '/renders/demo/0010-a.webp', 'Illustrative studio render representing a nardo grey 2021 Audi RS 6 Avant', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000010', '/photos/demo/0010.webp', 'Nardo Grey Audi RS 6 Avant (C8), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000010' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000010', '/renders/demo/0010-b.webp', 'Illustrative rear three-quarter render representing a 2021 Audi RS 6 Avant', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000010' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000011', 'de000000-0000-4000-8000-000000000012', '2022-tesla-model-3-long-range-demo11', 'Tesla', 'Model 3', 'Long Range', 2022, 31500, 'USD', 'US', 'Texas', 'Austin', 29000, 'mi', 'used', 'sedan', 'single_speed', 'electric', 'awd', 'everyday', 'Pearl White', 'Black', 'Dual-motor electric', 434, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Dual-motor electric saloon with glass roof (illustrative).', 'active', true, false, false, '2026-09-25T12:00:00Z', '2026-09-25T12:00:00Z', '2026-09-25T12:00:00Z', '2026-09-25T12:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000011', '/renders/demo/0011-a.webp', 'Illustrative studio render representing a pearl white 2022 Tesla Model 3', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000011', '/photos/demo/0011.webp', 'White Tesla Model 3, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000011' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000011', '/renders/demo/0011-b.webp', 'Illustrative rear three-quarter render representing a 2022 Tesla Model 3', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000011' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000012', 'de000000-0000-4000-8000-000000000005', '2023-tesla-model-y-performance-demo12', 'Tesla', 'Model Y', 'Performance', 2023, 64900, 'AUD', 'AU', 'Victoria', 'Melbourne', 17500, 'km', 'used', 'suv', 'single_speed', 'electric', 'awd', 'everyday', 'Midnight Silver', 'Black', 'Dual-motor electric', 456, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Performance electric SUV with 21-inch wheels (illustrative).', 'active', true, false, false, '2026-09-24T03:20:00Z', '2026-09-24T03:20:00Z', '2026-09-24T03:20:00Z', '2026-09-24T03:20:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000012', '/renders/demo/0012-a.webp', 'Illustrative studio render representing a midnight silver 2023 Tesla Model Y', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000012', '/photos/demo/0012.webp', 'Grey Tesla Model Y, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000012' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000012', '/renders/demo/0012-b.webp', 'Illustrative rear three-quarter render representing a 2023 Tesla Model Y', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000012' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000013', 'de000000-0000-4000-8000-000000000005', '2025-byd-seal-performance-demo13', 'BYD', 'Seal', 'Performance', 2025, 58990, 'AUD', 'AU', 'Victoria', 'Melbourne', 15, 'km', 'new', 'sedan', 'single_speed', 'electric', 'awd', 'everyday', 'Arctic Blue', 'Black', 'Dual-motor electric', 523, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 New electric performance saloon (illustrative).', 'active', true, false, false, '2026-10-07T01:00:00Z', '2026-10-07T01:00:00Z', '2026-10-07T01:00:00Z', '2026-10-07T01:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000013', '/renders/demo/0013-a.webp', 'Illustrative studio render representing a arctic blue 2025 BYD Seal', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000013', '/photos/demo/0013.webp', 'Light blue BYD Seal electric saloon, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000013' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000013', '/renders/demo/0013-b.webp', 'Illustrative rear three-quarter render representing a 2025 BYD Seal', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000013' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000014', 'de000000-0000-4000-8000-000000000002', '2022-toyota-land-cruiser-300-gr-sport-demo14', 'Toyota', 'Land Cruiser', '300 GR Sport', 2022, 389000, 'AED', 'AE', 'Abu Dhabi', 'Abu Dhabi', 42000, 'km', 'used', 'suv', 'automatic', 'petrol', '4wd', 'luxury', 'Precious White Pearl', 'Black/Red leather', '3.5 L twin-turbo V6', 409, 5, 7, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000014', 'de000000-0000-4000-8000-000000000002', '2022-toyota-land-cruiser-300-demo14', 'Toyota', 'Land Cruiser', '300', 2022, 389000, 'AED', 'AE', 'Abu Dhabi', 'Abu Dhabi', 42000, 'km', 'used', 'suv', 'automatic', 'petrol', '4wd', 'luxury', 'Precious White Pearl', 'Black/Red leather', '3.5 L twin-turbo V6', 409, 5, 7, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Body-on-frame 4×4 with locking differentials (illustrative).', 'active', true, false, true, '2026-09-23T10:40:00Z', '2026-09-23T10:40:00Z', '2026-09-23T10:40:00Z', '2026-09-23T10:40:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000014', '/renders/demo/0014-a.webp', 'Illustrative studio render representing a precious white pearl 2022 Toyota Land Cruiser', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000014', '/photos/demo/0014.webp', 'White Toyota Land Cruiser 300 in a showroom, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000014' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000014', '/renders/demo/0014-b.webp', 'Illustrative rear three-quarter render representing a 2022 Toyota Land Cruiser', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000014' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000015', 'de000000-0000-4000-8000-000000000006', '2021-toyota-corolla-hybrid-demo15', 'Toyota', 'Corolla', 'Hybrid', 2021, 2180000, 'JPY', 'JP', 'Tokyo', 'Tokyo', 28000, 'km', 'used', 'hatchback', 'automatic', 'hybrid', 'fwd', 'everyday', 'Silver Metallic', 'Black fabric', '1.8 L hybrid', 122, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Efficient hybrid hatchback with full Japanese inspection history (illustrative).', 'active', true, false, false, '2026-09-22T05:30:00Z', '2026-09-22T05:30:00Z', '2026-09-22T05:30:00Z', '2026-09-22T05:30:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000015', '/renders/demo/0015-a.webp', 'Illustrative studio render representing a silver metallic 2021 Toyota Corolla', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000015', '/photos/demo/0015.webp', 'Silver Toyota Corolla hatchback (E210), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000015' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000015', '/renders/demo/0015-b.webp', 'Illustrative rear three-quarter render representing a 2021 Toyota Corolla', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000015' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000016', 'de000000-0000-4000-8000-000000000006', '2023-honda-civic-type-r-demo16', 'Honda', 'Civic', 'Type R', 2023, 5280000, 'JPY', 'JP', 'Osaka', 'Osaka', 9000, 'km', 'used', 'hatchback', 'manual', 'petrol', 'fwd', 'performance', 'Championship White', 'Red/Black', '2.0 L turbo four-cylinder', 330, 5, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Front-wheel-drive performance hatchback with six-speed manual (illustrative).', 'active', true, false, false, '2026-09-21T09:00:00Z', '2026-09-21T09:00:00Z', '2026-09-21T09:00:00Z', '2026-09-21T09:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000016', '/renders/demo/0016-a.webp', 'Illustrative studio render representing a championship white 2023 Honda Civic', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000016', '/photos/demo/0016.webp', 'White Honda Civic Type R (FL5), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000016' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000016', '/renders/demo/0016-b.webp', 'Illustrative rear three-quarter render representing a 2023 Honda Civic', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000016' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000017', 'de000000-0000-4000-8000-000000000006', '2017-nissan-gt-r-premium-edition-demo17', 'Nissan', 'GT-R', 'Premium Edition', 2017, 9800000, 'JPY', 'JP', 'Kanagawa', 'Yokohama', 33000, 'km', 'used', 'coupe', 'dual_clutch', 'petrol', 'awd', 'performance', 'Gun Metallic', 'Black leather', '3.8 L twin-turbo V6', 570, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000017', 'de000000-0000-4000-8000-000000000006', '2017-nissan-gt-r-premium-edition-demo17', 'Nissan', 'GT-R', 'Premium Edition', 2017, 9800000, 'JPY', 'JP', 'Kanagawa', 'Yokohama', 33000, 'km', 'used', 'coupe', 'dual_clutch', 'petrol', 'awd', 'performance', 'Super Silver', 'Black leather', '3.8 L twin-turbo V6', 570, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 All-wheel-drive grand touring coupé (illustrative).', 'active', true, false, false, '2026-09-20T14:30:00Z', '2026-09-20T14:30:00Z', '2026-09-20T14:30:00Z', '2026-09-20T14:30:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000017', '/renders/demo/0017-a.webp', 'Illustrative studio render representing a gun metallic 2017 Nissan GT-R', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000017', '/photos/demo/0017.webp', 'Super Silver Nissan GT-R (R35), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000017' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000017', '/renders/demo/0017-b.webp', 'Illustrative rear three-quarter render representing a 2017 Nissan GT-R', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000017' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000018', 'de000000-0000-4000-8000-000000000003', '2020-volkswagen-golf-gti-demo18', 'Volkswagen', 'Golf', 'GTI', 2020, 27900, 'EUR', 'DE', 'Berlin', 'Berlin', 41000, 'km', 'used', 'hatchback', 'dual_clutch', 'petrol', 'fwd', 'everyday', 'Tornado Red', 'Tartan cloth', '2.0 L turbo four-cylinder', 245, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000018', 'de000000-0000-4000-8000-000000000003', '2020-volkswagen-golf-gti-demo18', 'Volkswagen', 'Golf', 'GTI', 2020, 27900, 'EUR', 'DE', 'Berlin', 'Berlin', 41000, 'km', 'used', 'hatchback', 'dual_clutch', 'petrol', 'fwd', 'everyday', 'Oryx White Pearl', 'Tartan cloth', '2.0 L turbo four-cylinder', 245, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 The benchmark hot hatch (illustrative).', 'active', true, false, false, '2026-09-19T11:11:00Z', '2026-09-19T11:11:00Z', '2026-09-19T11:11:00Z', '2026-09-19T11:11:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000018', '/renders/demo/0018-a.webp', 'Illustrative studio render representing a tornado red 2020 Volkswagen Golf', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000018', '/photos/demo/0018.webp', 'White Volkswagen Golf GTI (Mk8), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000018' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000018', '/renders/demo/0018-b.webp', 'Illustrative rear three-quarter render representing a 2020 Volkswagen Golf', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000018' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000019', 'de000000-0000-4000-8000-000000000014', '2022-volvo-xc90-recharge-t8-demo19', 'Volvo', 'XC90', 'Recharge T8', 2022, 649000, 'SEK', 'SE', null, 'Stockholm', 36000, 'km', 'used', 'suv', 'automatic', 'plug_in_hybrid', 'awd', 'luxury', 'Denim Blue', 'Blond leather', '2.0 L plug-in hybrid', 455, 5, 7, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Seven-seat plug-in hybrid SUV (illustrative).', 'active', true, false, false, '2026-09-18T08:00:00Z', '2026-09-18T08:00:00Z', '2026-09-18T08:00:00Z', '2026-09-18T08:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000019', '/renders/demo/0019-a.webp', 'Illustrative studio render representing a denim blue 2022 Volvo XC90', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000019', '/photos/demo/0019.webp', 'Dark blue Volvo XC90 T8 plug-in hybrid, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000019' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000019', '/renders/demo/0019-b.webp', 'Illustrative rear three-quarter render representing a 2022 Volvo XC90', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000019' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000020', 'de000000-0000-4000-8000-000000000015', '2023-hyundai-ioniq-5-long-range-awd-demo20', 'Hyundai', 'Ioniq 5', 'Long Range AWD', 2023, 46500, 'CAD', 'CA', 'Ontario', 'Toronto', 21000, 'km', 'used', 'suv', 'single_speed', 'electric', 'awd', 'everyday', 'Digital Teal', 'Grey', 'Dual-motor electric', 320, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 800-volt electric crossover with ultra-fast charging (illustrative).', 'active', true, false, false, '2026-09-17T17:45:00Z', '2026-09-17T17:45:00Z', '2026-09-17T17:45:00Z', '2026-09-17T17:45:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000020', '/renders/demo/0020-a.webp', 'Illustrative studio render representing a digital teal 2023 Hyundai Ioniq 5', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000020', '/photos/demo/0020.webp', 'Teal-grey Hyundai Ioniq 5, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000020' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000020', '/renders/demo/0020-b.webp', 'Illustrative rear three-quarter render representing a 2023 Hyundai Ioniq 5', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000020' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000021', 'de000000-0000-4000-8000-000000000001', '2022-kia-sportage-gt-line-hybrid-demo21', 'Kia', 'Sportage', 'GT-Line Hybrid', 2022, 21995, 'GBP', 'GB', 'West Midlands', 'Birmingham', 24000, 'mi', 'used', 'suv', 'automatic', 'hybrid', 'fwd', 'everyday', 'Lunar Silver', 'Black', '1.6 L turbo hybrid', 226, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000021', 'de000000-0000-4000-8000-000000000001', '2022-kia-sportage-gt-line-hybrid-demo21', 'Kia', 'Sportage', 'GT-Line Hybrid', 2022, 21995, 'GBP', 'GB', 'West Midlands', 'Birmingham', 24000, 'mi', 'used', 'suv', 'automatic', 'hybrid', 'fwd', 'everyday', 'White', 'Black', '1.6 L turbo hybrid', 226, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Family hybrid SUV with panoramic roof (illustrative).', 'active', true, false, false, '2026-09-16T10:20:00Z', '2026-09-16T10:20:00Z', '2026-09-16T10:20:00Z', '2026-09-16T10:20:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000021', '/renders/demo/0021-a.webp', 'Illustrative studio render representing a lunar silver 2022 Kia Sportage', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000021', '/photos/demo/0021.webp', 'White Kia Sportage hybrid (fifth generation), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000021' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000021', '/renders/demo/0021-b.webp', 'Illustrative rear three-quarter render representing a 2022 Kia Sportage', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000021' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000022', 'de000000-0000-4000-8000-000000000001', '2023-land-rover-range-rover-sport-p400-dynamic-se-demo22', 'Land Rover', 'Range Rover Sport', 'P400 Dynamic SE', 2023, 84950, 'GBP', 'GB', 'Greater London', 'London', 9500, 'mi', 'used', 'suv', 'automatic', 'petrol', 'awd', 'luxury', 'Carpathian Grey', 'Ebony leather', '3.0 L straight-six mild hybrid', 400, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000022', 'de000000-0000-4000-8000-000000000001', '2023-land-rover-range-rover-sport-p400-dynamic-se-demo22', 'Land Rover', 'Range Rover Sport', 'P400 Dynamic SE', 2023, 84950, 'GBP', 'GB', 'Greater London', 'London', 9500, 'mi', 'used', 'suv', 'automatic', 'petrol', 'awd', 'luxury', 'White', 'Ebony leather', '3.0 L straight-six mild hybrid', 400, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Luxury performance SUV with air suspension (illustrative).', 'active', true, false, false, '2026-09-15T09:30:00Z', '2026-09-15T09:30:00Z', '2026-09-15T09:30:00Z', '2026-09-15T09:30:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000022', '/renders/demo/0022-a.webp', 'Illustrative studio render representing a carpathian grey 2023 Land Rover Range Rover Sport', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000022', '/photos/demo/0022.webp', 'White third-generation Range Rover Sport, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000022' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000022', '/renders/demo/0022-b.webp', 'Illustrative rear three-quarter render representing a 2023 Land Rover Range Rover Sport', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000022' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000023', 'de000000-0000-4000-8000-000000000004', '2021-jeep-wrangler-rubicon-demo23', 'Jeep', 'Wrangler', 'Rubicon', 2021, 41900, 'USD', 'US', 'Colorado', 'Denver', 31000, 'mi', 'used', 'suv', 'automatic', 'petrol', '4wd', 'everyday', 'Sarge Green', 'Black', '3.6 L V6', 285, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000023', 'de000000-0000-4000-8000-000000000004', '2021-jeep-wrangler-rubicon-demo23', 'Jeep', 'Wrangler', 'Rubicon', 2021, 41900, 'USD', 'US', 'Colorado', 'Denver', 31000, 'mi', 'used', 'suv', 'automatic', 'petrol', '4wd', 'everyday', 'Black', 'Black', '3.6 L V6', 285, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Trail-rated 4×4 with removable roof panels (illustrative).', 'active', true, false, false, '2026-09-14T15:00:00Z', '2026-09-14T15:00:00Z', '2026-09-14T15:00:00Z', '2026-09-14T15:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000023', '/renders/demo/0023-a.webp', 'Illustrative studio render representing a sarge green 2021 Jeep Wrangler', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000023', '/photos/demo/0023.webp', 'Black Jeep Wrangler Unlimited Rubicon (JL) at a motor show, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000023' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000023', '/renders/demo/0023-b.webp', 'Illustrative rear three-quarter render representing a 2021 Jeep Wrangler', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000023' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000024', 'de000000-0000-4000-8000-000000000004', '2020-ford-mustang-gt-demo24', 'Ford', 'Mustang', 'GT', 2020, 33500, 'USD', 'US', 'Florida', 'Miami', 22000, 'mi', 'used', 'coupe', 'manual', 'petrol', 'rwd', 'performance', 'Race Red', 'Ebony', '5.0 L V8', 460, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000024', 'de000000-0000-4000-8000-000000000004', '2020-ford-mustang-gt-demo24', 'Ford', 'Mustang', 'GT', 2020, 33500, 'USD', 'US', 'Florida', 'Miami', 22000, 'mi', 'used', 'coupe', 'manual', 'petrol', 'rwd', 'performance', 'Blue', 'Ebony', '5.0 L V8', 460, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Naturally aspirated V8 with six-speed manual (illustrative).', 'active', true, false, false, '2026-09-13T20:15:00Z', '2026-09-13T20:15:00Z', '2026-09-13T20:15:00Z', '2026-09-13T20:15:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000024', '/renders/demo/0024-a.webp', 'Illustrative studio render representing a race red 2020 Ford Mustang', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000024', '/photos/demo/0024.webp', 'Blue Ford Mustang GT fastback (2018 facelift), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000024' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000024', '/renders/demo/0024-b.webp', 'Illustrative rear three-quarter render representing a 2020 Ford Mustang', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000024' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000025', 'de000000-0000-4000-8000-000000000004', '2021-chevrolet-corvette-stingray-3lt-demo25', 'Chevrolet', 'Corvette', 'Stingray 3LT', 2021, 69900, 'USD', 'US', 'Arizona', 'Phoenix', 12000, 'mi', 'used', 'coupe', 'dual_clutch', 'petrol', 'rwd', 'performance', 'Rapid Blue', 'Jet Black', '6.2 L V8', 495, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000025', 'de000000-0000-4000-8000-000000000004', '2021-chevrolet-corvette-stingray-3lt-demo25', 'Chevrolet', 'Corvette', 'Stingray 3LT', 2021, 69900, 'USD', 'US', 'Arizona', 'Phoenix', 12000, 'mi', 'used', 'coupe', 'dual_clutch', 'petrol', 'rwd', 'performance', 'Red', 'Jet Black', '6.2 L V8', 495, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Mid-engined V8 sports car with removable roof panel (illustrative).', 'active', true, false, false, '2026-09-12T13:00:00Z', '2026-09-12T13:00:00Z', '2026-09-12T13:00:00Z', '2026-09-12T13:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000025', '/renders/demo/0025-a.webp', 'Illustrative studio render representing a rapid blue 2021 Chevrolet Corvette', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000025', '/photos/demo/0025.webp', 'Red Chevrolet Corvette Stingray (C8), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000025' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000025', '/renders/demo/0025-b.webp', 'Illustrative rear three-quarter render representing a 2021 Chevrolet Corvette', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000025' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000026', 'de000000-0000-4000-8000-000000000015', '2021-lexus-lc-500-demo26', 'Lexus', 'LC 500', null, 2021, 98000, 'CAD', 'CA', 'British Columbia', 'Vancouver', 16000, 'km', 'used', 'coupe', 'automatic', 'petrol', 'rwd', 'luxury', 'Structural Blue', 'Black/Blue', '5.0 L V8', 471, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000026', 'de000000-0000-4000-8000-000000000015', '2021-lexus-lc-500-demo26', 'Lexus', 'LC 500', null, 2021, 98000, 'CAD', 'CA', 'British Columbia', 'Vancouver', 16000, 'km', 'used', 'coupe', 'automatic', 'petrol', 'rwd', 'luxury', 'Deep Blue Mica', 'Black/Blue', '5.0 L V8', 471, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Grand tourer with naturally aspirated V8 (illustrative).', 'active', true, false, false, '2026-09-11T22:00:00Z', '2026-09-11T22:00:00Z', '2026-09-11T22:00:00Z', '2026-09-11T22:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000026', '/renders/demo/0026-a.webp', 'Illustrative studio render representing a structural blue 2021 Lexus LC 500', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000026', '/photos/demo/0026.webp', 'Deep Blue Mica Lexus LC 500 coupé, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000026' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000026', '/renders/demo/0026-b.webp', 'Illustrative rear three-quarter render representing a 2021 Lexus LC 500', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000026' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000027', 'de000000-0000-4000-8000-000000000003', '1991-porsche-911-carrera-2-964-demo27', 'Porsche', '911', 'Carrera 2 (964)', 1991, 109000, 'EUR', 'DE', 'Baden-Württemberg', 'Stuttgart', 118000, 'km', 'used', 'coupe', 'manual', 'petrol', 'rwd', 'classic', 'Guards Red', 'Black leather', '3.6 L flat-six', 250, 2, 4, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Air-cooled classic with documented history (illustrative).', 'active', true, false, false, '2026-09-10T10:00:00Z', '2026-09-10T10:00:00Z', '2026-09-10T10:00:00Z', '2026-09-10T10:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000027', '/renders/demo/0027-a.webp', 'Illustrative studio render representing a guards red 1991 Porsche 911', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000027', '/photos/demo/0027.webp', 'Red Porsche 911 Carrera 2 (964 generation), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000027' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000027', '/renders/demo/0027-b.webp', 'Illustrative rear three-quarter render representing a 1991 Porsche 911', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000027' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000028', 'de000000-0000-4000-8000-000000000013', '1966-jaguar-e-type-series-1-4-2-fixed-head-coup-demo28', 'Jaguar', 'E-Type', 'Series 1 4.2 Fixed Head Coupé', 1966, 145000, 'GBP', 'GB', 'Greater Manchester', 'Manchester', 61000, 'mi', 'used', 'coupe', 'manual', 'petrol', 'rwd', 'classic', 'British Racing Green', 'Tan leather', '4.2 L straight-six', 265, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000028', 'de000000-0000-4000-8000-000000000013', '1962-jaguar-e-type-series-1-3-8-fixed-head-coup-demo28', 'Jaguar', 'E-Type', 'Series 1 3.8 Fixed Head Coupé', 1962, 145000, 'GBP', 'GB', 'Greater Manchester', 'Manchester', 61000, 'mi', 'used', 'coupe', 'manual', 'petrol', 'rwd', 'classic', 'Gunmetal grey', 'Tan leather', '3.8 L straight-six', 265, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Restored classic grand tourer (illustrative).', 'active', true, false, true, '2026-09-09T09:00:00Z', '2026-09-09T09:00:00Z', '2026-09-09T09:00:00Z', '2026-09-09T09:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000028', '/renders/demo/0028-a.webp', 'Illustrative studio render representing a british racing green 1966 Jaguar E-Type', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000028', '/photos/demo/0028.webp', 'Gunmetal grey 1962 Jaguar E-Type Series 1 fixed-head coupé at a classic car show', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000028' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000028', '/renders/demo/0028-b.webp', 'Illustrative rear three-quarter render representing a 1966 Jaguar E-Type', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000028' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000029', 'de000000-0000-4000-8000-000000000004', '1969-mercedes-benz-280-sl-pagoda-demo29', 'Mercedes-Benz', '280 SL', 'Pagoda', 1969, 128000, 'USD', 'US', 'California', 'San Francisco', 74000, 'mi', 'used', 'convertible', 'automatic', 'petrol', 'rwd', 'classic', 'Signal Red', 'Cognac MB-Tex', '2.8 L straight-six', 170, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000029', 'de000000-0000-4000-8000-000000000004', '1971-mercedes-benz-280-sl-pagoda-demo29', 'Mercedes-Benz', '280 SL', 'Pagoda', 1971, 128000, 'USD', 'US', 'California', 'San Francisco', 74000, 'mi', 'used', 'convertible', 'automatic', 'petrol', 'rwd', 'classic', 'Dark red', 'Cognac MB-Tex', '2.8 L straight-six', 170, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Classic roadster with hardtop (illustrative).', 'active', true, false, false, '2026-09-08T18:00:00Z', '2026-09-08T18:00:00Z', '2026-09-08T18:00:00Z', '2026-09-08T18:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000029', '/renders/demo/0029-a.webp', 'Illustrative studio render representing a signal red 1969 Mercedes-Benz 280 SL', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000029', '/photos/demo/0029.webp', 'Dark red Mercedes-Benz 280 SL ''Pagoda'' (W113), side view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000029' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000029', '/renders/demo/0029-b.webp', 'Illustrative rear three-quarter render representing a 1969 Mercedes-Benz 280 SL', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000029' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000030', 'de000000-0000-4000-8000-000000000017', '2021-toyota-hilux-2-8-gd-6-legend-double-cab-demo30', 'Toyota', 'Hilux', '2.8 GD-6 Legend Double Cab', 2021, 549900, 'ZAR', 'ZA', 'Gauteng', 'Johannesburg', 68000, 'km', 'used', 'pickup', 'automatic', 'diesel', '4wd', 'everyday', 'Glacier White', 'Black leather', '2.8 L turbo-diesel', 201, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000030', 'de000000-0000-4000-8000-000000000017', '2021-toyota-hilux-2-4-gd-6-double-cab-demo30', 'Toyota', 'Hilux', '2.4 GD-6 Double Cab', 2021, 549900, 'ZAR', 'ZA', 'Gauteng', 'Johannesburg', 68000, 'km', 'used', 'pickup', 'automatic', 'diesel', '4wd', 'everyday', 'Silver', 'Black leather', '2.4 L turbo-diesel', 150, 4, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Double-cab 4×4 pickup with tow bar (illustrative).', 'active', true, false, false, '2026-09-07T07:00:00Z', '2026-09-07T07:00:00Z', '2026-09-07T07:00:00Z', '2026-09-07T07:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000030', '/renders/demo/0030-a.webp', 'Illustrative studio render representing a glacier white 2021 Toyota Hilux', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000030', '/photos/demo/0030.webp', 'Silver Toyota Hilux double cab (2020 facelift) in a showroom, front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000030' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000030', '/renders/demo/0030-b.webp', 'Illustrative rear three-quarter render representing a 2021 Toyota Hilux', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000030' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000031', 'de000000-0000-4000-8000-000000000016', '2020-lexus-rx-350-demo31', 'Lexus', 'RX', '350', 2020, 48000000, 'NGN', 'NG', 'Lagos', 'Lagos', 54000, 'km', 'used', 'suv', 'automatic', 'petrol', 'awd', 'luxury', 'Atomic Silver', 'Parchment', '3.5 L V6', 295, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000031', 'de000000-0000-4000-8000-000000000016', '2020-lexus-rx-350-demo31', 'Lexus', 'RX', '350', 2020, 48000000, 'NGN', 'NG', 'Lagos', 'Lagos', 54000, 'km', 'used', 'suv', 'automatic', 'petrol', 'awd', 'luxury', 'Grey metallic', 'Parchment', '3.5 L V6', 295, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Premium crossover SUV (illustrative).', 'active', true, false, false, '2026-09-06T12:00:00Z', '2026-09-06T12:00:00Z', '2026-09-06T12:00:00Z', '2026-09-06T12:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000031', '/renders/demo/0031-a.webp', 'Illustrative studio render representing a atomic silver 2020 Lexus RX', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000031', '/photos/demo/0031.webp', 'Grey Lexus RX 350 (fourth generation, facelift), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000031' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000031', '/renders/demo/0031-b.webp', 'Illustrative rear three-quarter render representing a 2020 Lexus RX', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000031' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
-values ('d0000000-0000-4000-8000-000000000032', 'de000000-0000-4000-8000-000000000002', '2022-mercedes-benz-g-class-g-63-demo32', 'Mercedes-Benz', 'G-Class', 'G 63', 2022, 720000, 'AED', 'AE', 'Dubai', 'Dubai', 19000, 'km', 'used', 'suv', 'automatic', 'petrol', '4wd', 'luxury', 'Obsidian Black', 'Black/Red Nappa', '4.0 L twin-turbo V8', 585, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
+values ('d0000000-0000-4000-8000-000000000032', 'de000000-0000-4000-8000-000000000002', '2022-mercedes-benz-g-class-g-63-demo32', 'Mercedes-Benz', 'G-Class', 'G 63', 2022, 720000, 'AED', 'AE', 'Dubai', 'Dubai', 19000, 'km', 'used', 'suv', 'automatic', 'petrol', '4wd', 'luxury', 'Grey', 'Black/Red Nappa', '4.0 L twin-turbo V8', 585, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Iconic off-roader with three locking differentials (illustrative).', 'active', true, false, false, '2026-09-05T16:00:00Z', '2026-09-05T16:00:00Z', '2026-09-05T16:00:00Z', '2026-09-05T16:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000032', '/renders/demo/0032-a.webp', 'Illustrative studio render representing a obsidian black 2022 Mercedes-Benz G-Class', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000032', '/photos/demo/0032.webp', 'Grey Mercedes-AMG G 63 (W463), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000032' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000032', '/renders/demo/0032-b.webp', 'Illustrative rear three-quarter render representing a 2022 Mercedes-Benz G-Class', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000032' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000033', 'de000000-0000-4000-8000-000000000011', '2022-peugeot-208-allure-demo33', 'Peugeot', '208', 'Allure', 2022, 16900, 'EUR', 'FR', 'Auvergne-Rhône-Alpes', 'Lyon', 23000, 'km', 'used', 'hatchback', 'manual', 'petrol', 'fwd', 'everyday', 'Elixir Red', 'Grey fabric', '1.2 L turbo three-cylinder', 100, 5, 5, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Economical city car (illustrative).', 'active', true, false, false, '2026-09-04T09:30:00Z', '2026-09-04T09:30:00Z', '2026-09-04T09:30:00Z', '2026-09-04T09:30:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000033', '/renders/demo/0033-a.webp', 'Illustrative studio render representing a elixir red 2022 Peugeot 208', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000033', '/photos/demo/0033.webp', 'Red Peugeot 208 (second generation), rear three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000033' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000033', '/renders/demo/0033-b.webp', 'Illustrative rear three-quarter render representing a 2022 Peugeot 208', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000033' and position = 1);
 
 insert into public.vehicles (id, seller_id, slug, make, model, variant, year, price, currency, country_code, region, city, mileage, mileage_unit, condition, body_style, transmission, fuel_type, drivetrain, segment, exterior_colour, interior_colour, engine, power_hp, doors, seats, description, status, is_demo, featured, inspection_available, published_at, approved_at, submitted_at, created_at)
 values ('d0000000-0000-4000-8000-000000000034', 'de000000-0000-4000-8000-000000000003', '2020-audi-r8-v10-performance-demo34', 'Audi', 'R8', 'V10 Performance', 2020, 149000, 'EUR', 'DE', 'Bavaria', 'Munich', 15000, 'km', 'used', 'coupe', 'dual_clutch', 'petrol', 'awd', 'supercar', 'Suzuka Grey', 'Black', '5.2 L V10', 620, 2, 2, 'This is a demonstration listing created to preview MOTION X. It is not a real vehicle for sale.
 
 Shown as an example of a listing marked as sold (illustrative).', 'sold', true, false, false, '2026-08-28T10:00:00Z', '2026-08-28T10:00:00Z', '2026-08-28T10:00:00Z', '2026-08-28T10:00:00Z')
 on conflict (id) do nothing;
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000034', '/renders/demo/0034-a.webp', 'Illustrative studio render representing a suzuka grey 2020 Audi R8', 1440, 960, 0
+insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000034', '/photos/demo/0034.webp', 'Light grey Audi R8 coupé (2019 facelift), front three-quarter view', 1600, 1067, 0
 where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000034' and position = 0);
-insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select 'd0000000-0000-4000-8000-000000000034', '/renders/demo/0034-b.webp', 'Illustrative rear three-quarter render representing a 2020 Audi R8', 1440, 960, 1
-where not exists (select 1 from public.vehicle_images where vehicle_id = 'd0000000-0000-4000-8000-000000000034' and position = 1);
 
 commit;

@@ -15,7 +15,7 @@ export default async function AccountPage() {
   return (
     <>
       <PageHeader eyebrow="Welcome" title={user.displayName} actions={<ButtonLink href="/cars" iconRight={<ArrowRight />}>Discover cars</ButtonLink>} />
-      <div className="grid gap-px bg-line sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-px bg-line sm:grid-cols-3">
         <StatCard label="Saved vehicles" value={saved.length} />
         <StatCard label="Enquiries sent" value={enquiries.length} />
         <StatCard label="Seller replies" value={replies} />
@@ -26,7 +26,7 @@ export default async function AccountPage() {
             <h2 className="eyebrow">Recently saved</h2>
             <Link href="/account/saved" className="font-mono text-[0.64rem] uppercase tracking-[0.16em] text-silver hover:text-white">All saved →</Link>
           </div>
-          <ul className="grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">
             {saved.slice(0, 3).map((v) => <li key={v.id} className="bg-obsidian"><VehicleCard vehicle={v} /></li>)}
           </ul>
         </section>

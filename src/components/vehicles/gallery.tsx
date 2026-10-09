@@ -3,7 +3,28 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { cn } from "@/lib/format";
-import type { VehicleImage } from "@/lib/types";
+import type { ImageCredit, VehicleImage } from "@/lib/types";
+
+/** Attribution required by the photograph's licence (CC BY / CC BY-SA). */
+export function PhotoCredit({ credit, className }: { credit: ImageCredit; className?: string }) {
+  return (
+    <p className={cn("mt-2 text-[0.7rem] leading-relaxed text-dim", className)}>
+      Photo:{" "}
+      <a href={credit.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline decoration-line-strong underline-offset-2 hover:text-silver">
+        {credit.author}
+      </a>
+      ,{" "}
+      {credit.licenceUrl ? (
+        <a href={credit.licenceUrl} target="_blank" rel="noopener noreferrer license" className="underline decoration-line-strong underline-offset-2 hover:text-silver">
+          {credit.licence}
+        </a>
+      ) : (
+        credit.licence
+      )}
+      , via Wikimedia Commons (adapted).
+    </p>
+  );
+}
 
 export function Gallery({ images, title }: { images: VehicleImage[]; title: string }) {
   const [index, setIndex] = useState(0);
@@ -57,8 +78,8 @@ export function Gallery({ images, title }: { images: VehicleImage[]; title: stri
           className="object-cover animate-[mx-fade-up_0.5s_var(--ease-cinematic)]"
         />
         {current.illustrative && (
-          <p className="absolute bottom-3 left-4 rounded-xs bg-obsidian/70 px-2 py-1 font-mono text-[0.58rem] uppercase tracking-[0.18em] text-white/70 backdrop-blur">
-            Illustrative render — not a photograph of this vehicle
+          <p className="absolute bottom-3 left-3 max-w-[calc(100%-7rem)] rounded-xs bg-obsidian/70 px-2 py-1 font-mono text-[0.58rem] uppercase tracking-[0.18em] text-white/75 backdrop-blur">
+            Representative photo — not the vehicle listed
           </p>
         )}
         {count > 1 && (
@@ -80,6 +101,8 @@ export function Gallery({ images, title }: { images: VehicleImage[]; title: stri
           </button>
         </div>
       </div>
+
+      {current.credit && <PhotoCredit credit={current.credit} />}
 
       {count > 1 && (
         <ul className="mt-px grid grid-cols-4 gap-px sm:grid-cols-6" aria-label="Choose photo">

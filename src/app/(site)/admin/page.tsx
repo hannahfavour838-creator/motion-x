@@ -18,7 +18,7 @@ export default async function AdminHome() {
   return (
     <>
       <PageHeader title="Platform overview" description="Live counts from the database. Demonstration listings are counted separately." />
-      <div className="grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Live listings" value={s.listings_live ?? 0} hint={`${s.listings_demo ?? 0} demonstration`} />
         <StatCard label="Awaiting review" value={s.listings_pending ?? 0} />
         <StatCard label="Open reports" value={s.reports_open ?? 0} />

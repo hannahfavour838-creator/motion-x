@@ -1,6 +1,6 @@
 import { storagePublicUrl } from "@/lib/env";
 import type { DealerProfile, SellerSummary, Vehicle, Vehicle3DAsset, VehicleImage } from "@/lib/types";
-import { DEMO_SELLERS, DEMO_VEHICLES, demoImagePaths, type DemoSeller, type DemoVehicle } from "@/lib/demo/inventory";
+import { DEMO_SELLERS, DEMO_VEHICLES, demoPhotoCredit, demoPhotos, type DemoSeller, type DemoVehicle } from "@/lib/demo/inventory";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Row = Record<string, any>;
@@ -39,6 +39,7 @@ export function mapSeller(row: Row | null, isDemoVehicle = false): SellerSummary
 }
 
 export function mapImage(row: Row, isDemo: boolean): VehicleImage {
+  const representative = isDemo && !row.storage_path;
   return {
     id: row.id,
     url: row.storage_path ? storagePublicUrl("vehicle-images", row.storage_path) : row.url,
@@ -46,7 +47,8 @@ export function mapImage(row: Row, isDemo: boolean): VehicleImage {
     width: row.width ?? null,
     height: row.height ?? null,
     position: row.position ?? 0,
-    illustrative: isDemo && !row.storage_path,
+    illustrative: representative,
+    credit: representative && row.url ? demoPhotoCredit(row.url) : null,
   };
 }
 
@@ -211,14 +213,15 @@ export function mapDemoVehicle(v: DemoVehicle): Vehicle {
     createdAt: v.publishedAt,
     updatedAt: v.publishedAt,
     rejectionReason: null,
-    images: demoImagePaths(v).map((img, i) => ({
+    images: demoPhotos(v).map((img, i) => ({
       id: `${v.id}-${i}`,
-      url: img.url,
+      url: img.src,
       alt: img.alt,
-      width: 1440,
-      height: 960,
+      width: img.width,
+      height: img.height,
       position: i,
       illustrative: true,
+      credit: img.credit,
     })),
     seller: demoSellerSummary(seller),
   };

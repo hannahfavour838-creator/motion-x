@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { ProsePage } from "@/components/layout/prose-page";
 import { listShowroomAssets } from "@/lib/data/assets";
+import { allDemoPhotoCredits } from "@/lib/demo/inventory";
 
 export const metadata: Metadata = { title: "Credits & licences", alternates: { canonical: "/credits" } };
 
 export default async function CreditsPage() {
   const assets = await listShowroomAssets();
+  const photos = allDemoPhotoCredits();
   return (
     <ProsePage eyebrow="Credits" title="Credits & licences">
       <section>
@@ -18,8 +20,32 @@ export default async function CreditsPage() {
         <p>Modifications for MOTION X: logo surfaces removed, textures recompressed to WebP, geometry compressed with meshopt, and studio materials applied at runtime.</p>
       </section>
       <section>
-        <h2>Illustrative renders</h2>
-        <p>Images on demonstration listings and collection banners are generic illustrative renders produced by MOTION X&apos;s own procedural studio renderer. They are not photographs and do not depict any specific manufacturer&apos;s vehicle.</p>
+        <h2>Photographs on demonstration listings</h2>
+        <p>
+          Demonstration listings are fictional. Each is illustrated by a representative photograph of the same make, model and generation from{" "}
+          <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>, used under the licence shown. The
+          photographs do not show the vehicles described. Listing colours and trims were chosen to match the photographs.
+        </p>
+        <p>
+          Modifications for MOTION X: resized, cropped or extended to a 3:2 frame with a blurred backdrop, registration plates obscured, and converted to
+          WebP. Adapted versions of CC BY-SA photographs are shared under the same licence as the original. Collection banners reuse the photographs
+          credited below.
+        </p>
+        <ul>
+          {photos.map(({ vehicle, photo }) => (
+            <li key={vehicle.id}>
+              <strong>{vehicle.year} {vehicle.make} {vehicle.model}</strong> (demonstration listing) —{" "}
+              <a href={photo.credit.sourceUrl} target="_blank" rel="noopener noreferrer">{photo.credit.title}</a> by {photo.credit.author}.{" "}
+              Licence:{" "}
+              {photo.credit.licenceUrl ? (
+                <a href={photo.credit.licenceUrl} target="_blank" rel="noopener noreferrer license">{photo.credit.licence}</a>
+              ) : (
+                photo.credit.licence
+              )}
+              .
+            </li>
+          ))}
+        </ul>
       </section>
       <section>
         <h2>Typefaces & software</h2>

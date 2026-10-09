@@ -17,7 +17,7 @@ export default async function DirectoryPage() {
       {dealers.length === 0 ? (
         <div className="mt-12"><EmptyState title="No dealerships yet" action={<ButtonLink href="/sign-up?type=dealer">Register your dealership</ButtonLink>}>Dealerships appear here once they create a storefront.</EmptyState></div>
       ) : (
-        <ul className="mt-12 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid grid-cols-1 gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
           {dealers.map((d) => (
             <li key={d.id} className="bg-obsidian">
               <Link href={`/dealers/${d.slug}`} className="flex h-full flex-col justify-between gap-8 p-7 hover:bg-ink">

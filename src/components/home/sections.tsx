@@ -108,8 +108,8 @@ export function FeaturedSection({ vehicles }: { vehicles: Vehicle[] }) {
             <SectionHeading index="03" eyebrow={demo ? "Demonstration inventory" : "Featured vehicles"} title={<span id="featured-title">Now in<br />the showroom.</span>}>
               {demo && (
                 <span className="text-sm">
-                  These are demonstration listings with illustrative studio renders, shown so you can explore the
-                  marketplace. They are not vehicles for sale.
+                  These are fictional demonstration listings, illustrated with representative photographs of each
+                  model, so you can explore the marketplace. They are not vehicles for sale.
                 </span>
               )}
             </SectionHeading>
@@ -119,7 +119,7 @@ export function FeaturedSection({ vehicles }: { vehicles: Vehicle[] }) {
           </Reveal>
         </div>
         {vehicles.length ? (
-          <div className="mt-14 grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">
             {vehicles.map((v, i) => (
               <Reveal key={v.id} delay={(i % 3) * 90} className="bg-obsidian">
                 <VehicleCard vehicle={v} />
@@ -180,7 +180,7 @@ export function DealersSection({ dealers }: { dealers: DealerProfile[] }) {
             <Reveal>
               <SectionHeading index="05" eyebrow="Global dealers" title={<span id="dealers-title">Dealerships<br />on MOTION X.</span>} />
             </Reveal>
-            <ul className="mt-14 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-14 grid grid-cols-1 gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
               {dealers.slice(0, 6).map((d) => (
                 <li key={d.id} className="bg-obsidian">
                   <Link href={`/dealers/${d.slug}`} className="group flex h-full flex-col justify-between gap-10 p-8 transition-colors hover:bg-ink">

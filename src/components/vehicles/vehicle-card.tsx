@@ -39,7 +39,7 @@ export function VehicleCard({ vehicle: v, priority = false, className }: { vehic
           <SaveButton vehicleId={v.id} />
         </div>
         {img?.illustrative && (
-          <p className="absolute bottom-2.5 left-3 font-mono text-[0.55rem] uppercase tracking-[0.18em] text-white/55">Illustrative render</p>
+          <p className="absolute bottom-2.5 left-3 font-mono text-[0.55rem] uppercase tracking-[0.18em] text-white/70">Representative photo</p>
         )}
       </div>
       <div className="flex flex-1 flex-col p-5">

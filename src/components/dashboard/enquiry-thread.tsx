@@ -14,7 +14,7 @@ export function EnquiryThread({
   const canReply = enquiry.status !== "spam" && (role === "seller" || enquiry.buyer_id === viewerId);
   return (
     <div className="space-y-8">
-      <div className="grid gap-px bg-line sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-px bg-line sm:grid-cols-3">
         <div className="bg-obsidian py-3 pr-4">
           <p className="eyebrow">Vehicle</p>
           {enquiry.vehicle ? (

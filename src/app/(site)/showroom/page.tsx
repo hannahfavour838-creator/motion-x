@@ -47,7 +47,7 @@ export default async function ShowroomIndex() {
       <section className="container-x mt-20">
         <h2 className="eyebrow mb-6">Listings with a 3D model</h2>
         {with3d && with3d.vehicles.length > 0 ? (
-          <ul className="grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">{with3d.vehicles.map((v) => <li key={v.id} className="bg-obsidian"><VehicleCard vehicle={v} /></li>)}</ul>
+          <ul className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">{with3d.vehicles.map((v) => <li key={v.id} className="bg-obsidian"><VehicleCard vehicle={v} /></li>)}</ul>
         ) : (
           <div className="flex flex-col gap-5 border border-dashed border-line p-8 md:flex-row md:items-center md:justify-between">
             <p className="max-w-xl text-sm text-muted">No marketplace listings have a licensed 3D model attached yet. Dealers can contact us about adding 3D models to their inventory.</p>

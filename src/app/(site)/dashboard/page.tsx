@@ -32,7 +32,7 @@ export default async function DashboardPage() {
         </EmptyState>
       ) : (
         <div className="space-y-10">
-          <div className="grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-4">
             <StatCard label="Live" value={count("active")} hint={`${count("paused")} paused`} />
             <StatCard label="Pending review" value={count("pending_review")} hint={`${count("draft")} drafts`} />
             <StatCard label="Sold" value={count("sold")} />

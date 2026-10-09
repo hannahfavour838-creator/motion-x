@@ -25,8 +25,22 @@ export interface VehicleImage {
   width: number | null;
   height: number | null;
   position: number;
-  /** Illustrative render rather than a photograph of this exact vehicle. */
+  /**
+   * Representative image rather than a photograph of this exact vehicle
+   * (demonstration listings only).
+   */
   illustrative: boolean;
+  /** Attribution for openly licensed imagery; null for seller uploads. */
+  credit?: ImageCredit | null;
+}
+
+export interface ImageCredit {
+  /** File title at the source (e.g. the Wikimedia Commons file name). */
+  title: string;
+  author: string;
+  licence: string;
+  licenceUrl: string | null;
+  sourceUrl: string;
 }
 
 export interface Vehicle3DAsset {

@@ -73,7 +73,7 @@ export const COLLECTIONS: CollectionDef[] = [
     kicker: "01",
     description: "Mid-engine drama, carbon and theatre. The most extreme machines on the platform.",
     filters: { segment: "supercar" },
-    image: "/renders/collection-supercars.webp",
+    image: "/photos/banners/supercars.webp",
   },
   {
     slug: "luxury",
@@ -81,7 +81,7 @@ export const COLLECTIONS: CollectionDef[] = [
     kicker: "02",
     description: "Grand tourers, flagship saloons and limousines built around craftsmanship and calm.",
     filters: { segment: "luxury" },
-    image: "/renders/collection-luxury.webp",
+    image: "/photos/banners/luxury.webp",
   },
   {
     slug: "performance",
@@ -89,7 +89,7 @@ export const COLLECTIONS: CollectionDef[] = [
     kicker: "03",
     description: "Driver-focused coupés, hot saloons and track-capable everyday cars.",
     filters: { segment: "performance" },
-    image: "/renders/collection-performance.webp",
+    image: "/photos/banners/performance.webp",
   },
   {
     slug: "suvs",
@@ -97,7 +97,7 @@ export const COLLECTIONS: CollectionDef[] = [
     kicker: "04",
     description: "Commanding, capable and versatile — from family SUVs to luxury off-roaders.",
     filters: { body: "suv" },
-    image: "/renders/collection-suvs.webp",
+    image: "/photos/banners/suvs.webp",
   },
   {
     slug: "electric",
@@ -105,7 +105,7 @@ export const COLLECTIONS: CollectionDef[] = [
     kicker: "05",
     description: "Battery-electric vehicles across every segment, from city cars to hyper-EVs.",
     filters: { fuel: "electric" },
-    image: "/renders/collection-electric.webp",
+    image: "/photos/banners/electric.webp",
   },
   {
     slug: "everyday",
@@ -113,7 +113,7 @@ export const COLLECTIONS: CollectionDef[] = [
     kicker: "06",
     description: "Dependable, efficient and affordable cars for the way you really drive.",
     filters: { segment: "everyday" },
-    image: "/renders/collection-everyday.webp",
+    image: "/photos/banners/everyday.webp",
   },
   {
     slug: "classics",
@@ -121,7 +121,7 @@ export const COLLECTIONS: CollectionDef[] = [
     kicker: "07",
     description: "Modern classics and historic automobiles with a story worth preserving.",
     filters: { segment: "classic" },
-    image: "/renders/collection-classics.webp",
+    image: "/photos/banners/classics.webp",
   },
 ];
 

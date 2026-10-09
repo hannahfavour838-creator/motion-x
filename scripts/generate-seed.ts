@@ -8,7 +8,7 @@
  */
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { DEMO_SELLERS, DEMO_VEHICLES, demoImagePaths } from "../src/lib/demo/inventory";
+import { DEMO_SELLERS, DEMO_VEHICLES, demoPhotos } from "../src/lib/demo/inventory";
 import { demoVehicleSlug } from "../src/lib/data/mappers";
 
 const q = (v: unknown): string => {
@@ -58,8 +58,8 @@ for (const v of DEMO_VEHICLES) {
   lines.push(`insert into public.vehicles (${Object.keys(cols).join(", ")})
 values (${Object.values(cols).map(q).join(", ")})
 on conflict (id) do nothing;`);
-  demoImagePaths(v).forEach((img, i) => {
-    lines.push(`insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select ${q(v.id)}, ${q(img.url)}, ${q(img.alt)}, 1440, 960, ${i}
+  demoPhotos(v).forEach((img, i) => {
+    lines.push(`insert into public.vehicle_images (vehicle_id, url, alt, width, height, position) select ${q(v.id)}, ${q(img.src)}, ${q(img.alt)}, ${img.width}, ${img.height}, ${i}
 where not exists (select 1 from public.vehicle_images where vehicle_id = ${q(v.id)} and position = ${i});`);
   });
   lines.push("");

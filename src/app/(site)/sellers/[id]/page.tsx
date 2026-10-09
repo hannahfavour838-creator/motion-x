@@ -25,7 +25,7 @@ export default async function SellerPage({ params }: PageProps<"/sellers/[id]">)
       <section className="mt-12">
         <h2 className="eyebrow mb-6">Listings · {listings.length}</h2>
         {listings.length ? (
-          <ul className="grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">{listings.map((v) => <li key={v.id} className="bg-obsidian"><VehicleCard vehicle={v} /></li>)}</ul>
+          <ul className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-3">{listings.map((v) => <li key={v.id} className="bg-obsidian"><VehicleCard vehicle={v} /></li>)}</ul>
         ) : <EmptyState title="No live listings" />}
       </section>
     </div>

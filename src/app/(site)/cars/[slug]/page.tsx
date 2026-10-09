@@ -104,7 +104,7 @@ export default async function VehiclePage({ params }: PageProps<"/cars/[slug]">)
         )}
         {v.isDemo && (
           <div className="mt-6 border border-warning/25 bg-warning/[0.04] px-4 py-3 text-sm text-warning/90" role="note">
-            Demonstration listing — created to preview MOTION X. It is not a real vehicle for sale and the images are illustrative studio renders.
+            Demonstration listing — created to preview MOTION X. It is not a real vehicle for sale, the seller is fictional, and the photograph shows a representative example of this model, not the vehicle described.
           </div>
         )}
       </div>
@@ -263,11 +263,11 @@ export default async function VehiclePage({ params }: PageProps<"/cars/[slug]">)
 
       {similar.length > 0 && (
         <section aria-labelledby="similar-title" className="container-x mt-24 border-t border-line pt-16">
-          <div className="flex items-end justify-between gap-6">
+          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
             <h2 id="similar-title" className="font-display text-3xl uppercase">Similar vehicles</h2>
             <ButtonLink href={`/cars?segment=${v.segment}`} variant="ghost" iconRight={<ArrowRight />}>More {LABELS.segment[v.segment]}</ButtonLink>
           </div>
-          <ul className="mt-10 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-10 grid grid-cols-1 gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
             {similar.map((s) => (
               <li key={s.id} className="bg-obsidian"><VehicleCard vehicle={s} /></li>
             ))}

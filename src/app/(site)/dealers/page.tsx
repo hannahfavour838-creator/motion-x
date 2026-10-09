@@ -26,13 +26,13 @@ export default function DealersPage() {
     <>
       <section className="relative isolate overflow-hidden pb-20 pt-36 md:pb-28 md:pt-48">
         <div className="absolute inset-0 -z-10">
-          <Image src="/renders/collection-luxury.webp" alt="" fill priority sizes="100vw" className="object-cover opacity-55" />
+          <Image src="/photos/banners/luxury.webp" alt="" fill priority sizes="100vw" className="object-cover opacity-55" />
           <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/75 to-obsidian/10" />
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-obsidian to-transparent" />
         </div>
         <div className="container-x">
           <Eyebrow>For dealerships</Eyebrow>
-          <h1 className="mt-6 max-w-4xl font-display text-[clamp(2.6rem,6.5vw,6.5rem)] font-light uppercase leading-[0.92]">
+          <h1 className="mt-6 max-w-4xl font-display text-[clamp(2.15rem,6.5vw,6.5rem)] font-light uppercase leading-[0.92]">
             <span className="text-metal">Your inventory.<br />A world of opportunity.</span>
           </h1>
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-silver">
@@ -47,7 +47,7 @@ export default function DealersPage() {
       <section aria-labelledby="tools" className="border-t border-line py-24 md:py-32">
         <div className="container-x">
           <Reveal><SectionHeading eyebrow="Dealer tools" title={<span id="tools">Everything included<br />today.</span>}>These are the tools available in the current platform — nothing listed here is a future promise.</SectionHeading></Reveal>
-          <ul className="mt-14 grid gap-px bg-line sm:grid-cols-2 xl:grid-cols-4">
+          <ul className="mt-14 grid grid-cols-1 gap-px bg-line sm:grid-cols-2 xl:grid-cols-4">
             {tools.map(([t, b], i) => (
               <Reveal as="li" key={t} delay={(i % 4) * 70} className="bg-obsidian p-7">
                 <span className="font-mono text-[0.65rem] text-electric">{String(i + 1).padStart(2, "0")}</span>

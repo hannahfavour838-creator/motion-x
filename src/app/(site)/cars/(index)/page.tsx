@@ -54,11 +54,11 @@ export default async function CarsPage({ searchParams }: PageProps<"/cars">) {
 
       {hasDemo && (
         <p className="mt-6 border border-warning/25 bg-warning/[0.04] px-4 py-3 text-sm text-warning/90">
-          Demonstration inventory — these listings and their illustrative renders exist so you can explore MOTION X. They are not vehicles for sale.
+          Demonstration inventory — these listings and sellers are fictional and exist so you can explore MOTION X. Photographs show representative examples of each model, not the vehicles described. Nothing here is for sale.
         </p>
       )}
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[17.5rem_1fr]">
+      <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[17.5rem_minmax(0,1fr)]">
         <FiltersPanel filters={filters} makes={makes} activeCount={chips.length} />
         <div className="min-w-0">
           {chips.length > 0 && (
@@ -86,7 +86,7 @@ export default async function CarsPage({ searchParams }: PageProps<"/cars">) {
           )}
 
           {result.vehicles.length > 0 ? (
-            <ul className="grid gap-px bg-line sm:grid-cols-2 2xl:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 2xl:grid-cols-3">
               {result.vehicles.map((v, i) => (
                 <li key={v.id} className="bg-obsidian">
                   <VehicleCard vehicle={v} priority={i < 2} />
