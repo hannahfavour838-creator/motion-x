@@ -1,6 +1,6 @@
 "use client";
 
-import { Environment, Lightformer, MeshReflectorMaterial } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer, MeshReflectorMaterial } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -59,8 +59,11 @@ export function StudioFloor({ quality }: { quality: "high" | "low" }) {
           <meshStandardMaterial color="#040506" roughness={0.6} metalness={0.2} />
         )}
       </mesh>
-      <FloorVignette />
+      <FloorPool />
       <GroundShadow />
+      {/* The car is static (only the camera moves), so the contact shadow is baked once. */}
+      <ContactShadows position={[0, 0.009, 0]} scale={[9, 9]} far={1.4} blur={1.6} opacity={0.92} resolution={quality === "high" ? 1024 : 512} frames={1} color="#000000" />
+      <FloorVignette />
     </>
   );
 }
@@ -90,6 +93,28 @@ function FloorVignette({ color = "#050607", inner = 0.16, outer = 0.5 }: { color
   );
 }
 
+/** A faint pool of light on the floor so the car's shadows read against it. */
+function FloorPool() {
+  const texture = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 256;
+    const g = c.getContext("2d")!;
+    const grad = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+    grad.addColorStop(0, "#fff");
+    grad.addColorStop(0.35, "#8a8a8a");
+    grad.addColorStop(1, "#000");
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 256, 256);
+    return new THREE.CanvasTexture(c);
+  }, []);
+  return (
+    <mesh rotation-x={-Math.PI / 2} position-y={0.003} renderOrder={-1}>
+      <planeGeometry args={[15, 10]} />
+      <meshBasicMaterial color="#1c2026" alphaMap={texture} transparent opacity={0.85} depthWrite={false} toneMapped={false} />
+    </mesh>
+  );
+}
+
 /** Soft, edge-free grounding shadow beneath the car (cheaper than a shadow pass). */
 function GroundShadow() {
   const texture = useMemo(() => {
@@ -107,7 +132,7 @@ function GroundShadow() {
   return (
     <mesh rotation-x={-Math.PI / 2} position-y={0.006} renderOrder={1}>
       <planeGeometry args={[6.4, 3.1]} />
-      <meshBasicMaterial color="#000000" alphaMap={texture} transparent opacity={0.9} depthWrite={false} toneMapped={false} />
+      <meshBasicMaterial color="#000000" alphaMap={texture} transparent opacity={0.75} depthWrite={false} toneMapped={false} />
     </mesh>
   );
 }
