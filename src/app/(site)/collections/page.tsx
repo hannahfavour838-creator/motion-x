@@ -30,7 +30,7 @@ export default async function CollectionsPage() {
           <li key={c.slug}>
             <Link href={collectionHref(c)} className="group relative isolate grid min-h-[22rem] overflow-hidden bg-ink md:grid-cols-2">
               <div className={`relative min-h-56 ${i % 2 ? "md:order-2" : ""}`}>
-                <Image src={c.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition-transform duration-[1.4s] ease-[var(--ease-cinematic)] group-hover:scale-105" />
+                <Image src={c.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" {...(i === 0 ? { loading: "eager" as const, fetchPriority: "high" as const } : {})} className="object-cover transition-transform duration-[1.4s] ease-[var(--ease-cinematic)] group-hover:scale-105" />
               </div>
               <div className="flex flex-col justify-center p-8 md:p-14">
                 <span className="font-mono text-xs text-electric">{c.kicker}</span>

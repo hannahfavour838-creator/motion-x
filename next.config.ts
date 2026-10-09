@@ -22,7 +22,34 @@ function remoteImagePatterns(): NonNullable<NextConfig["images"]>["remotePattern
   return patterns;
 }
 
+/**
+ * Production builds warn (rather than fail) about missing configuration so a
+ * preview deployment still works, but nothing ships silently misconfigured.
+ */
+function warnAboutProductionConfig() {
+  const isProdBuild = process.env.NODE_ENV === "production" && (process.env.VERCEL_ENV ?? "production") === "production";
+  if (!isProdBuild) return;
+  const warnings: string[] = [];
+  if (!process.env.NEXT_PUBLIC_SITE_URL) warnings.push("NEXT_PUBLIC_SITE_URL is not set — canonical URLs and auth-email links use a fallback origin.");
+  const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL);
+  const hasKey = Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  if (hasUrl !== hasKey) warnings.push("Only one of NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is set — accounts stay disabled.");
+  if (!hasUrl && !hasKey) warnings.push("Supabase is not configured — the site runs in preview mode (demonstration inventory, no accounts).");
+  if (!process.env.RATE_LIMIT_SALT) warnings.push("RATE_LIMIT_SALT is not set — visitor IP hashes use a public default salt.");
+  for (const w of warnings) console.warn(`⚠ MOTION X config: ${w}`);
+}
+warnAboutProductionConfig();
+
+/**
+ * Conservative CSP: blocks plugins, <base> hijacking, cross-site form posts and
+ * framing. Scripts/styles are not restricted here — a nonce-based script policy
+ * should be added and tested together with analytics before tightening further.
+ */
+const contentSecurityPolicy = ["object-src 'none'", "base-uri 'self'", "form-action 'self'", "frame-ancestors 'self'"].join("; ");
+
 const securityHeaders = [
+  { key: "Content-Security-Policy", value: contentSecurityPolicy },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },

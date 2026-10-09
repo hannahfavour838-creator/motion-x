@@ -82,6 +82,8 @@ Set `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` to enable cookieless Plausible analytics. Eve
 
 ## Deploy to Vercel
 
+**Full launch checklist (accounts, every environment variable, database, domain and post-deploy smoke test): [DEPLOYMENT.md](DEPLOYMENT.md).**
+
 1. Push the repository and import it in Vercel (framework preset: Next.js).
 2. Add the environment variables from `.env.example` (at least the Supabase URL/key and `NEXT_PUBLIC_SITE_URL`).
 3. Deploy. The daily cron in `vercel.json` activates automatically when `CRON_SECRET` is set.

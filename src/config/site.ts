@@ -2,12 +2,25 @@
  * Site-wide configuration. Everything that differs per deployment comes from
  * environment variables — nothing country-specific is hardcoded here.
  */
+
+/**
+ * Canonical origin used for metadata, sitemaps and auth-email links.
+ * NEXT_PUBLIC_SITE_URL should always be set in production; on Vercel the
+ * project's production domain (a system variable) is the fallback, so links
+ * never point at localhost in a deployed build.
+ */
+function resolveSiteUrl(): string {
+  const vercel = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const url = process.env.NEXT_PUBLIC_SITE_URL || (vercel ? `https://${vercel}` : "http://localhost:3000");
+  return url.replace(/\/$/, "");
+}
+
 export const siteConfig = {
   name: "MOTION X",
   tagline: "The world is your showroom.",
   description:
     "MOTION X is a global automotive discovery platform connecting buyers, private sellers and professional dealerships across international markets — with immersive 3D showrooms.",
-  url: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
+  url: resolveSiteUrl(),
   contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "",
   social: {
     instagram: process.env.NEXT_PUBLIC_SOCIAL_INSTAGRAM || "",
