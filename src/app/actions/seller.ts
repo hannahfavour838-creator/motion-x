@@ -7,6 +7,7 @@ import { uploadLimits } from "@/config/site";
 import { getSessionUser, isSeller, type SessionUser } from "@/lib/auth";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { classifyUploadStartFailure, MAX_OBJECTS_PER_LISTING_FOLDER, UPLOAD_START_MESSAGES } from "@/lib/upload-errors";
 import type { ActionResult } from "@/lib/types";
 import { dealerSchema, fieldErrors, formObject, listingSchema, profileSchema, type ListingInput } from "@/lib/validation";
 
@@ -142,13 +143,24 @@ export async function createImageUpload(vehicleId: string, file: { type: string;
   if (isErr(ctx)) return ctx;
   if (!(uploadLimits.allowedImageTypes as readonly string[]).includes(file.type)) return { ok: false, message: "Use JPEG, PNG, WebP or AVIF images." };
   if (file.size > uploadLimits.maxImageBytes) return { ok: false, message: `Images must be ${uploadLimits.maxImageBytes / 1024 / 1024} MB or smaller.` };
-  const { data: v } = await ctx.supabase.from("vehicles").select("id").eq("id", vehicleId).eq("seller_id", ctx.user.id).maybeSingle();
+  const { data: v } = await ctx.supabase.from("vehicles").select("id, status").eq("id", vehicleId).eq("seller_id", ctx.user.id).maybeSingle();
   if (!v) return { ok: false, message: "Listing not found." };
+  if (v.status === "suspended") return { ok: false, message: UPLOAD_START_MESSAGES.listing_suspended };
   const { count } = await ctx.supabase.from("vehicle_images").select("id", { count: "exact", head: true }).eq("vehicle_id", vehicleId);
   if ((count ?? 0) >= uploadLimits.maxImagesPerListing) return { ok: false, message: `A listing can have at most ${uploadLimits.maxImagesPerListing} photographs.` };
-  const path = `${ctx.user.id}/${vehicleId}/${randomUUID()}.${EXT[file.type]}`;
+  const folder = `${ctx.user.id}/${vehicleId}`;
+  const path = `${folder}/${randomUUID()}.${EXT[file.type]}`;
   const { data, error } = await ctx.supabase.storage.from("vehicle-images").createSignedUploadUrl(path);
-  if (error || !data) return { ok: false, message: "Upload could not be started. Please try again." };
+  if (error || !data) {
+    // Diagnose only on failure so successful uploads pay no extra round trip.
+    const { data: objects } = await ctx.supabase.storage.from("vehicle-images").list(folder, { limit: MAX_OBJECTS_PER_LISTING_FOLDER + 1 });
+    const reason = classifyUploadStartFailure({
+      listingStatus: v.status,
+      folderObjectCount: objects ? objects.length : null,
+      error: error ? { message: error.message, status: error.status, statusCode: error.statusCode } : null,
+    });
+    return { ok: false, message: UPLOAD_START_MESSAGES[reason] };
+  }
   return { ok: true, data: { signedUrl: data.signedUrl, path } };
 }
 

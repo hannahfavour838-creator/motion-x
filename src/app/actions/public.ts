@@ -4,6 +4,7 @@ import { isSupabaseConfigured } from "@/lib/env";
 import { looksAutomated, rateLimit } from "@/lib/rate-limit";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { submissionErrorMessage } from "@/lib/submission-errors";
 import type { ActionResult } from "@/lib/types";
 import { contactSchema, enquirySchema, fieldErrors, formObject, inspectionSchema, reportSchema } from "@/lib/validation";
 
@@ -19,12 +20,8 @@ const DEMO_LISTING: ActionResult = {
 
 const BOT: ActionResult = { ok: false, message: "Your submission could not be verified. Please wait a moment and try again." };
 
-function dbError(message: string | undefined, fallback: string): ActionResult {
-  if (message?.includes("Too many")) return { ok: false, message: "You have sent several requests recently. Please try again later." };
-  if (message?.includes("not available")) return { ok: false, message: "This vehicle is no longer accepting enquiries." };
-  if (message?.includes("own listing")) return { ok: false, message: "You cannot enquire about your own listing." };
-  if (message?.includes("inspection")) return { ok: false, message: "This seller has not enabled inspection requests." };
-  return { ok: false, message: fallback };
+function dbError(message: string | undefined, fallback: string, signedIn: boolean): ActionResult {
+  return { ok: false, message: submissionErrorMessage(message, fallback, signedIn) };
 }
 
 async function isDemoVehicle(vehicleId: string): Promise<boolean> {
@@ -52,7 +49,7 @@ export async function submitEnquiry(_: ActionResult | null, fd: FormData): Promi
     preferred_contact: d.preferredContact,
     message: d.message,
   });
-  if (error) return dbError(error.message, "We couldn't send your enquiry. Please try again.");
+  if (error) return dbError(error.message, "We couldn't send your enquiry. Please try again.", Boolean(auth.user));
   return { ok: true, message: "Your enquiry has been sent. The seller will reply using the contact details you provided." };
 }
 
@@ -78,7 +75,7 @@ export async function requestInspection(_: ActionResult | null, fd: FormData): P
     inspector: d.inspector,
     message: d.message,
   });
-  if (error) return dbError(error.message, "We couldn't send your inspection request. Please try again.");
+  if (error) return dbError(error.message, "We couldn't send your inspection request. Please try again.", Boolean(auth.user));
   return { ok: true, message: "Inspection request sent. The seller will contact you to arrange an independent inspection." };
 }
 
@@ -101,7 +98,7 @@ export async function reportListing(_: ActionResult | null, fd: FormData): Promi
     details: d.details,
     contact_email: d.contactEmail,
   });
-  if (error) return dbError(error.message, "We couldn't submit your report. Please try again.");
+  if (error) return dbError(error.message, "We couldn't submit your report. Please try again.", Boolean(auth.user));
   return { ok: true, message: "Thank you. Our team will review this listing." };
 }
 
@@ -112,8 +109,9 @@ export async function sendContactMessage(_: ActionResult | null, fd: FormData): 
   if (!isSupabaseConfigured()) return NOT_CONFIGURED;
   if (!(await rateLimit("contact", 5, 60 * 60 * 1000))) return { ok: false, message: "Too many messages from your network. Please try again later." };
   const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
   const { error } = await supabase.from("contact_messages").insert(parsed.data);
-  if (error) return dbError(error.message, "We couldn't send your message. Please try again.");
+  if (error) return dbError(error.message, "We couldn't send your message. Please try again.", Boolean(auth.user));
   return { ok: true, message: "Thanks — your message has reached the MOTION X team." };
 }
 

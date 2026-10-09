@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/toast";
 import { uploadLimits } from "@/config/site";
 import { publicEnv } from "@/lib/env";
 import { cn } from "@/lib/format";
+import { uploadTransferMessage } from "@/lib/upload-errors";
 import type { VehicleImage } from "@/lib/types";
 
 interface UploadItem { key: string; name: string; progress: number; error?: string }
@@ -21,8 +22,9 @@ function putWithProgress(url: string, file: File, onProgress: (p: number) => voi
     xhr.setRequestHeader("x-upsert", "false");
     if (publicEnv.supabaseKey) xhr.setRequestHeader("apikey", publicEnv.supabaseKey);
     xhr.upload.onprogress = (e) => e.lengthComputable && onProgress(Math.round((e.loaded / e.total) * 100));
-    xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(`Upload failed (${xhr.status})`)));
-    xhr.onerror = () => reject(new Error("Network error during upload"));
+    const maxMb = uploadLimits.maxImageBytes / 1024 / 1024;
+    xhr.onload = () => (xhr.status >= 200 && xhr.status < 300 ? resolve() : reject(new Error(uploadTransferMessage(xhr.status, maxMb))));
+    xhr.onerror = () => reject(new Error(uploadTransferMessage(0, maxMb)));
     xhr.send(file);
   });
 }
