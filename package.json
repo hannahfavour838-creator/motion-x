@@ -12,6 +12,7 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "db:test": "bash scripts/db-test.sh",
+    "db:test:pglite": "node tools/qa/db-test-pglite.mjs",
     "seed:generate": "tsx scripts/generate-seed.ts",
     "admin:grant": "tsx scripts/grant-admin.ts",
     "photos": "node tools/photos/fetch.mjs && node tools/photos/process.mjs",
@@ -38,6 +39,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

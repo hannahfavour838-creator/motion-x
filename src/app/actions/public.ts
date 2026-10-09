@@ -2,6 +2,7 @@
 
 import { isSupabaseConfigured } from "@/lib/env";
 import { looksAutomated, rateLimit } from "@/lib/rate-limit";
+import { createServiceClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionResult } from "@/lib/types";
 import { contactSchema, enquirySchema, fieldErrors, formObject, inspectionSchema, reportSchema } from "@/lib/validation";
@@ -116,9 +117,16 @@ export async function sendContactMessage(_: ActionResult | null, fd: FormData): 
   return { ok: true, message: "Thanks — your message has reached the MOTION X team." };
 }
 
+/**
+ * Counts a listing view. record_vehicle_view is executable only by the service
+ * role (migration …0300), so visitors cannot inflate counts by calling it
+ * directly; this action applies a per-IP limit first. Without a service-role
+ * key, views are simply not recorded.
+ */
 export async function recordView(vehicleId: string): Promise<void> {
   if (!isSupabaseConfigured() || !/^[0-9a-f-]{36}$/i.test(vehicleId) || vehicleId.startsWith("d0000000-")) return;
   if (!(await rateLimit("view", 120, 60 * 60 * 1000))) return;
-  const supabase = await createClient();
-  await supabase.rpc("record_vehicle_view", { p_vehicle_id: vehicleId });
+  const service = createServiceClient();
+  if (!service) return;
+  await service.rpc("record_vehicle_view", { p_vehicle_id: vehicleId });
 }

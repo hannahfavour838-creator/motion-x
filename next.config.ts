@@ -35,6 +35,7 @@ function warnAboutProductionConfig() {
   const hasKey = Boolean(process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
   if (hasUrl !== hasKey) warnings.push("Only one of NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is set — accounts stay disabled.");
   if (!hasUrl && !hasKey) warnings.push("Supabase is not configured — the site runs in preview mode (demonstration inventory, no accounts).");
+  if ((hasUrl || hasKey) && !process.env.SUPABASE_SERVICE_ROLE_KEY && !process.env.SUPABASE_SECRET_KEY) warnings.push("SUPABASE_SERVICE_ROLE_KEY is not set — listing view statistics and exchange-rate refresh are disabled.");
   if (!process.env.RATE_LIMIT_SALT) warnings.push("RATE_LIMIT_SALT is not set — visitor IP hashes use a public default salt.");
   for (const w of warnings) console.warn(`⚠ MOTION X config: ${w}`);
 }

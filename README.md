@@ -22,6 +22,7 @@ Without Supabase credentials the app runs in **preview mode**: the marketplace, 
 | `npm run build` / `npm start` | Production build / server |
 | `npm run lint` · `npm run typecheck` | ESLint · TypeScript |
 | `npm run db:test` | Applies all migrations + seed to a throwaway local PostgreSQL and runs the security test suite |
+| `npm run db:test:pglite` | Same suite on PGlite (PostgreSQL compiled to WASM) — no PostgreSQL install needed. `TWICE=1` also checks the hardening migration is idempotent |
 | `npm run test:e2e` | Playwright end-to-end tests (`BASE_URL=http://localhost:3000`; set `CHROMIUM_PATH` if needed) |
 | `npm run test:unit` | Unit tests for security helpers (safe redirects) |
 | `npm run test:a11y` | axe-core WCAG 2.1 A/AA audit of public pages at desktop and mobile widths (`BASE_URL`, `CHROMIUM_PATH`) |
@@ -39,6 +40,7 @@ Without Supabase credentials the app runs in **preview mode**: the marketplace, 
    - `supabase/migrations/20261009000000_core_schema.sql` — tables, triggers, RLS policies, search function
    - `supabase/migrations/20261009000100_storage.sql` — `vehicle-images` and `dealer-logos` buckets + policies
    - `supabase/migrations/20261009000200_showroom_assets.sql` — the licensed 3D concept-car asset
+   - `supabase/migrations/20261009000300_hardening.sql` — security hardening (USD reference protection, anonymous quotas, upload ownership, function permissions)
 3. **Development only:** load demo inventory with `supabase/seed.sql`, and set `NEXT_PUBLIC_SHOW_DEMO_INVENTORY=true`. Do not run the seed in production. Remove demo data any time with
    `delete from auth.users where email like '%@demo.motionx.invalid';`
    If you loaded an older seed (with `/renders/demo/` images), run that delete and re-run `supabase/seed.sql` to pick up the photographs.
@@ -61,7 +63,7 @@ Without Supabase credentials the app runs in **preview mode**: the marketplace, 
 - **Abuse controls:** honeypot + minimum time-to-submit on public forms, a per-IP limiter in server actions, and authoritative per-email/per-account rate limits inside Postgres (`private.consume_rate_limit`, not exposed via the API).
 - **Uploads:** images go straight to Supabase Storage through short-lived signed URLs into the uploader's own folder; buckets enforce size (10 MB) and MIME types; the database rejects image rows outside the seller's folder.
 
-`npm run db:test` exercises all of this against real PostgreSQL (75 assertions; Supabase's `auth`/`storage` schemas are stubbed — see `supabase/tests/00_supabase_stubs.sql`).
+`npm run db:test` exercises all of this against real PostgreSQL (91 assertions; Supabase's `auth`/`storage` schemas are stubbed — see `supabase/tests/00_supabase_stubs.sql`).
 
 ---
 
@@ -126,7 +128,7 @@ tools/qa/                Playwright E2E tests, screenshots, poster capture
 
 ## What has been tested
 
-- **Database (PostgreSQL 16):** migrations + seed apply cleanly; 75 security/workflow assertions pass (RLS visibility, guarded columns, moderation transitions, enquiry routing, rate limits, verification, suspensions, storage paths, search incl. prefix, cross-currency and mileage filters, seller analytics).
+- **Database:** migrations + seed apply cleanly; 91 security/workflow assertions pass (RLS visibility, guarded columns, moderation transitions, enquiry routing, rate limits and anonymous quotas, verification, suspensions, storage upload ownership, USD reference integrity, function permissions, search incl. prefix, cross-currency and mileage filters, seller analytics). The original 75 were run on PostgreSQL 16; the current 91 were run with `npm run db:test:pglite` (PGlite / PostgreSQL 18.3), not yet on a real Supabase project.
 - **App (production build, preview mode):** 37 Playwright tests — hero (live WebGL and model-failure fallback), navigation, quick search, combined filters, chip removal, sorting, year/transmission/mileage filters, pagination, sold availability, empty state, vehicle page (gallery, noindex for demo), server-side form validation, report dialog, compare, save prompt, private-route redirects, admin 404, 3D showroom controls, robots/sitemap/OG, 404s, mobile overflow on 9 pages, mobile menu and filters, no-WebGL fallbacks, no uncaught errors.
 - `npm run lint`, `npm run typecheck` and `npm run build` pass.
 

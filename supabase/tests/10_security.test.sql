@@ -48,6 +48,15 @@ insert into public.exchange_rates (currency, rate, provider) values ('GBP', 0.80
 select test.ok((select account_type from public.profiles where id = '00000000-0000-0000-0000-00000000000d') = 'buyer',
   'sign-up metadata cannot request an admin account type');
 
+-- Hardening migration (…0300): configuration checks
+select test.ok((select not ('image/svg+xml' = any (allowed_mime_types)) and 'image/png' = any (allowed_mime_types)
+                from storage.buckets where id = 'dealer-logos'), 'dealer logos no longer accept SVG');
+select test.ok((select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+                where n.nspname in ('public', 'private') and p.prokind = 'f'
+                  and not exists (select 1 from pg_depend d where d.objid = p.oid and d.deptype = 'e')
+                  and not exists (select 1 from unnest(coalesce(p.proconfig, '{}'::text[])) c where c like 'search_path=%')) = 0,
+  'every application function pins search_path');
+
 insert into public.vehicles (seller_id, make, model, year, price, currency, country_code, city, mileage, condition, body_style, transmission, fuel_type, status)
   values ('00000000-0000-0000-0000-00000000000e', 'Ford', 'Focus', 2018, 9000, 'GBP', 'GB', 'Leeds', 40000, 'used', 'hatchback', 'manual', 'petrol', 'active');
 
@@ -62,6 +71,7 @@ insert into public.vehicles (seller_id, make, model, variant, year, price, curre
 select test.ok((select is_demo = false and featured = false and inspected_at is null and slug like '2021-porsche-911-carrera-s-%'
                 from public.vehicles where make = 'Porsche'), 'seller cannot self-assign demo/featured/inspected flags; slug generated');
 select test.ok((select mileage_km from public.vehicles where make = 'Porsche') = 19312, 'mileage normalised to km');
+select id as porsche_id from public.vehicles where make = 'Porsche' \gset
 
 select test.fails($$insert into public.vehicles (seller_id, make, model, year, price, currency, country_code, city, mileage, condition, body_style, transmission, fuel_type, status)
   values ('00000000-0000-0000-0000-00000000000a', 'BMW', 'M3', 2022, 70000, 'EUR', 'DE', 'Munich', 5000, 'used', 'sedan', 'automatic', 'petrol', 'active')$$,
@@ -80,11 +90,26 @@ select test.fails($$update public.profiles set identity_verified_at = now() wher
 select test.fails($$insert into public.admin_users (user_id) values (auth.uid())$$, 'seller cannot grant admin');
 select test.ok(not public.is_admin(), 'seller is not admin');
 
-insert into storage.objects (bucket_id, name) values ('vehicle-images', '00000000-0000-0000-0000-00000000000a/listing/photo-1.jpg');
+insert into storage.objects (bucket_id, name) values ('vehicle-images', '00000000-0000-0000-0000-00000000000a/' || :'porsche_id' || '/photo-1.jpg');
 select test.fails($$insert into storage.objects (bucket_id, name) values ('vehicle-images', '00000000-0000-0000-0000-00000000000b/listing/photo.jpg')$$,
   'seller cannot upload into another user''s folder');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('vehicle-images', '00000000-0000-0000-0000-00000000000a/listing/photo.jpg')$$,
+  'upload path must name one of the seller''s listings');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('vehicle-images', '00000000-0000-0000-0000-00000000000a/11111111-1111-4111-8111-111111111111/photo.jpg')$$,
+  'cannot upload for a listing that does not exist');
+select test.fails(format($f$insert into storage.objects (bucket_id, name) values ('vehicle-images', %L)$f$,
+  '00000000-0000-0000-0000-00000000000a/' || :'porsche_id' || '/extra/photo.jpg'), 'no nested folders inside a listing folder');
+do $$
+begin
+  for i in 2..30 loop
+    insert into storage.objects (bucket_id, name)
+      select 'vehicle-images', auth.uid()::text || '/' || id || '/photo-' || i || '.jpg' from public.vehicles where make = 'Porsche';
+  end loop;
+end $$;
+select test.fails(format($f$insert into storage.objects (bucket_id, name) values ('vehicle-images', %L)$f$,
+  '00000000-0000-0000-0000-00000000000a/' || :'porsche_id' || '/photo-31.jpg'), 'a listing folder holds at most 30 objects');
 insert into public.vehicle_images (vehicle_id, storage_path, position)
-  select id, '00000000-0000-0000-0000-00000000000a/listing/photo-1.jpg', 0 from public.vehicles where make = 'Porsche';
+  select id, '00000000-0000-0000-0000-00000000000a/' || id || '/photo-1.jpg', 0 from public.vehicles where make = 'Porsche';
 select test.fails($$insert into public.vehicle_images (vehicle_id, storage_path) select id, '00000000-0000-0000-0000-00000000000b/x.jpg' from public.vehicles where make = 'Porsche'$$,
   'image path must be inside the seller''s folder');
 select test.fails($$insert into public.vehicle_images (vehicle_id, url) select id, 'https://example.com/x.jpg' from public.vehicles where make = 'Porsche'$$,
@@ -99,6 +124,7 @@ select test.ok((select count(*) from public.profiles where account_type = 'buyer
 select test.ok((select count(*) from public.profiles where id = '00000000-0000-0000-0000-00000000000a') = 1, 'seller profiles are public');
 select test.ok((select count(*) from public.profile_private) = 0, 'private profile data hidden from public');
 select test.fails($$select count(*) from private.rate_limit_events$$, 'rate-limit table not readable by clients');
+select test.ok(public.setting('listing_moderation') is null, 'clients cannot read platform settings through setting()');
 reset role;
 
 -- ── Another seller cannot touch A's listing ──────────────────────────────
@@ -115,10 +141,13 @@ update public.vehicles set status = 'active' where make = 'Porsche';
 select test.ok((select approved_at is not null and published_at is not null from public.vehicles where make = 'Porsche'), 'approval stamps approval & publish dates');
 select test.ok((select count(*) from public.moderation_actions where action = 'admin_status_change' and to_status = 'active') = 1, 'approval recorded in moderation log');
 select test.ok((public.admin_platform_stats() ->> 'listings_live')::int = 1, 'admin statistics available');
+select test.ok(public.setting('listing_moderation') = '"required"'::jsonb, 'administrators can read platform settings');
 reset role;
 
 select test.act_as('authenticated', '00000000-0000-0000-0000-00000000000c');
 select test.fails($$select public.admin_platform_stats()$$, 'non-admins cannot read platform statistics');
+select test.fails(format($f$insert into storage.objects (bucket_id, name) values ('vehicle-images', %L)$f$,
+  '00000000-0000-0000-0000-00000000000c/' || :'porsche_id' || '/x.jpg'), 'buyers cannot upload into a listing they do not own');
 reset role;
 
 -- ── Public search ────────────────────────────────────────────────────────
@@ -136,7 +165,13 @@ select test.ok((select count(*) from public.search_vehicles(p_min_price => 12000
 select test.ok((select count(*) from public.search_vehicles(p_max_price => 110000, p_price_currency => 'USD')) = 0, 'cross-currency upper bound respected');
 select test.ok((select count(*) from public.search_vehicles(p_max_mileage_km => 15000)) = 0, 'mileage filter compares in km');
 select test.ok((select count(*) from public.search_vehicles(p_max_mileage_km => 20000)) = 1, 'mileage filter in km includes listing');
-select public.record_vehicle_view(id) from public.vehicles where make = 'Porsche';
+select test.fails($$select public.record_vehicle_view(id) from public.vehicles where make = 'Porsche'$$,
+  'visitors cannot call record_vehicle_view directly');
+reset role;
+select test.act_as('service_role', null);
+select public.record_vehicle_view(:'porsche_id');
+reset role;
+select test.act_as('anon', null);
 select test.fails($$select public.refresh_price_references()$$, 'public cannot run the rates refresh');
 
 -- Enquiry from an anonymous visitor
@@ -202,6 +237,8 @@ select test.ok((select count(*) from public.moderation_actions) >= 2, 'seller ca
 -- Price change keeps listing live; material edit returns it to review
 update public.vehicles set price = 95000 where make = 'Porsche';
 select test.ok((select status = 'active' and price_reference_usd = 118750 from public.vehicles where make = 'Porsche'), 'price change stays live and re-computes USD reference');
+update public.vehicles set price_reference_usd = 1 where make = 'Porsche';
+select test.ok((select status = 'active' and price_reference_usd = 118750 from public.vehicles where make = 'Porsche'), 'sellers cannot override the USD reference price');
 update public.vehicles set description = 'Now with a different story' where make = 'Porsche';
 select test.ok((select status from public.vehicles where make = 'Porsche') = 'pending_review', 'material edit returns listing to review');
 delete from public.vehicles where make = 'Ford';
@@ -239,6 +276,53 @@ select test.act_as('authenticated', '00000000-0000-0000-0000-00000000000a');
 insert into public.vehicles (seller_id, make, model, year, price, currency, country_code, city, mileage, condition, body_style, transmission, fuel_type, status)
   values (auth.uid(), 'Toyota', 'Corolla', 2020, 2400000, 'JPY', 'JP', 'Osaka', 30000, 'used', 'hatchback', 'automatic', 'hybrid', 'pending_review');
 select test.ok((select status = 'active' and price_reference_usd = 16000 from public.vehicles where make = 'Toyota'), 'auto moderation publishes immediately (JPY converted)');
+reset role;
+
+-- ── Hardening (…0300): anonymous submission quotas ───────────────────────
+update public.vehicles set inspection_available = true where make = 'Toyota';
+select test.act_as('anon', null);
+do $$
+begin
+  for i in 1..10 loop
+    insert into public.enquiries (vehicle_id, seller_id, name, email, message)
+      select id, seller_id, 'Visitor', 'quota' || i || '@example.test', 'Is this car still available?' from public.vehicles where make = 'Toyota';
+  end loop;
+  for i in 1..5 loop
+    insert into public.inspection_requests (vehicle_id, seller_id, name, email)
+      select id, seller_id, 'Visitor', 'inspect' || i || '@example.test' from public.vehicles where make = 'Toyota';
+    insert into public.listing_reports (vehicle_id, reason)
+      select id, 'other' from public.vehicles where make = 'Toyota';
+  end loop;
+  for i in 1..29 loop
+    insert into public.contact_messages (name, email, topic, message)
+      values ('Visitor', 'contact' || i || '@example.test', 'buying', 'A question about buying a car.');
+  end loop;
+end $$;
+select test.fails($$insert into public.enquiries (vehicle_id, seller_id, name, email, message)
+  select id, seller_id, 'Visitor', 'quota-new@example.test', 'Is this car still available?' from public.vehicles where make = 'Toyota'$$,
+  'anonymous enquiries are capped per listing, whatever the email');
+select test.fails($$insert into public.inspection_requests (vehicle_id, seller_id, name, email)
+  select id, seller_id, 'Visitor', 'inspect-new@example.test' from public.vehicles where make = 'Toyota'$$,
+  'anonymous inspection requests are capped per listing');
+select test.fails($$insert into public.listing_reports (vehicle_id, reason) select id, 'other' from public.vehicles where make = 'Toyota'$$,
+  'anonymous reports without an email are no longer unlimited');
+select test.fails($$insert into public.contact_messages (name, email, topic, message)
+  values ('Visitor', 'contact-new@example.test', 'buying', 'A question about buying a car.')$$,
+  'anonymous contact messages have an overall hourly cap');
+reset role;
+select test.act_as('authenticated', '00000000-0000-0000-0000-00000000000c');
+insert into public.enquiries (vehicle_id, seller_id, name, email, message)
+  select id, seller_id, 'Casey', 'buyer@example.test', 'Signed-in buyers are not affected by the anonymous cap.' from public.vehicles where make = 'Toyota';
+do $$
+begin
+  for i in 1..5 loop
+    insert into public.contact_messages (name, email, topic, message)
+      values ('Casey', 'casey' || i || '@example.test', 'buying', 'A question from a signed-in buyer.');
+  end loop;
+end $$;
+select test.fails($$insert into public.contact_messages (name, email, topic, message)
+  values ('Casey', 'casey-new@example.test', 'buying', 'A question from a signed-in buyer.')$$,
+  'signed-in contact messages are capped per user, whatever the email');
 reset role;
 
 

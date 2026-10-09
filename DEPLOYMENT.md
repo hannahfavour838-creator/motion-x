@@ -28,13 +28,15 @@ Never commit real values; `.env.local` is git-ignored for local use.
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key (`sb_publishable_…`) or legacy anon key | Yes (safe: Row Level Security protects data) |
 | `NEXT_PUBLIC_SHOW_DEMO_INVENTORY` | `false` in production | Yes |
 | `RATE_LIMIT_SALT` | A long random string (e.g. `openssl rand -hex 32`) | **No — secret** |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role / secret key. Server-only: records listing views (seller statistics) and runs the exchange-rate job. Without it, view statistics stay at zero. | **No — secret; never prefix with `NEXT_PUBLIC_`** |
 
 ### Required for exchange-rate conversion (optional feature)
+
+Also needs `SUPABASE_SERVICE_ROLE_KEY` (above).
 
 | Variable | Value | Secret? |
 |---|---|---|
 | `EXCHANGE_RATES_PROVIDER` | `open-er-api` (includes AED) or `frankfurter` | No |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service-role / secret key — used **only** by the cron job | **Yes — never prefix with `NEXT_PUBLIC_`** |
 | `CRON_SECRET` | A long random string; Vercel Cron sends it automatically | **Yes** |
 
 ### Optional
@@ -53,6 +55,7 @@ A production build prints `⚠ MOTION X config:` warnings for anything important
    1. `supabase/migrations/20261009000000_core_schema.sql`
    2. `supabase/migrations/20261009000100_storage.sql`
    3. `supabase/migrations/20261009000200_showroom_assets.sql`
+   4. `supabase/migrations/20261009000300_hardening.sql`
 3. **Do not run `supabase/seed.sql` in production.** It is fictional demonstration data for local/staging databases.
 4. Authentication → URL configuration: set **Site URL** to `NEXT_PUBLIC_SITE_URL` and add `https://<your-domain>/auth/callback` to **Redirect URLs** (add the `*.vercel.app` URL too while testing).
 5. Authentication → keep **Confirm email** on. Configure a custom SMTP sender before launch — Supabase's built-in email service is rate-limited and meant for testing.
