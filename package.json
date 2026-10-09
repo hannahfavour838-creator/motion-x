@@ -14,7 +14,8 @@
     "photos": "node tools/photos/fetch.mjs && node tools/photos/process.mjs",
     "renders:jobs": "tsx tools/studio-renderer/jobs.ts > .renders-jobs.json",
     "renders": "npm run renders:jobs && node tools/studio-renderer/render.mjs .renders-jobs.json",
-    "test:e2e": "node tools/qa/e2e.mjs"
+    "test:e2e": "node tools/qa/e2e.mjs",
+    "test:a11y": "node tools/qa/a11y.mjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
@@ -38,6 +39,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.186.0",
+    "axe-core": "^4.10.3",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "playwright": "^1.64.0",

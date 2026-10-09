@@ -7,7 +7,11 @@ import { cn } from "@/lib/format";
  */
 export function LogoMark({ className, title = "MOTION X" }: { className?: string; title?: string }) {
   return (
-    <svg viewBox="0 0 40 40" className={cn("h-7 w-7", className)} role="img" aria-label={title}>
+    <svg
+      viewBox="0 0 40 40"
+      className={cn("h-7 w-7", className)}
+      {...(title ? { role: "img", "aria-label": title } : { "aria-hidden": true, focusable: false })}
+    >
       <defs>
         <linearGradient id="mx-silver" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#ffffff" />

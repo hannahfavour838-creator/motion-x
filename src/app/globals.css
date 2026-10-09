@@ -13,7 +13,7 @@
   --color-silver: #c6cbd3;
   --color-white: #f7f8fa;
   --color-muted: #969da8;
-  --color-dim: #6b727d;
+  --color-dim: #7f8792; /* ≥ 4.5:1 on obsidian, ink and charcoal (WCAG AA) */
   --color-electric: #5c8dff;
   --color-glow: #234a9c;
   --color-line: rgb(198 203 211 / 0.12);
