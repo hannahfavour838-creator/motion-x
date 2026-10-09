@@ -1,6 +1,6 @@
 import "server-only";
 import { demoInventoryEnabled, isSupabaseConfigured } from "@/lib/env";
-import { createPublicClient } from "@/lib/supabase/server";
+import { getPublicClient } from "@/lib/supabase/server";
 import { DEMO_SELLERS } from "@/lib/demo/inventory";
 import type { DealerProfile, SellerSummary } from "@/lib/types";
 import { allDemoVehicles, demoSellerSummary, mapDealer, mapSeller } from "./mappers";
@@ -34,7 +34,7 @@ function demoDealers(): DealerProfile[] {
  */
 export async function listDealers({ includeDemo = false, limit = 48 } = {}): Promise<DealerProfile[]> {
   if (!isSupabaseConfigured()) return includeDemo && demoInventoryEnabled() ? demoDealers().slice(0, limit) : [];
-  const supabase = createPublicClient();
+  const supabase = await getPublicClient();
   const { data, error } = await supabase
     .from("dealer_profiles")
     .select("*, profile:profiles!dealer_profiles_id_fkey(is_demo, status)")
@@ -56,7 +56,7 @@ export async function listDealers({ includeDemo = false, limit = 48 } = {}): Pro
 export async function getDealerBySlug(slug: string): Promise<DealerProfile | null> {
   if (!/^[a-z0-9-]{2,120}$/.test(slug)) return null;
   if (!isSupabaseConfigured()) return demoInventoryEnabled() ? demoDealers().find((d) => d.slug === slug) ?? null : null;
-  const supabase = createPublicClient();
+  const supabase = await getPublicClient();
   const { data } = await supabase
     .from("dealer_profiles")
     .select("*, profile:profiles!dealer_profiles_id_fkey(is_demo, status)")
@@ -75,7 +75,7 @@ export async function getPublicSeller(id: string): Promise<SellerSummary | null>
     const s = DEMO_SELLERS.find((x) => x.id === id);
     return s ? demoSellerSummary(s) : null;
   }
-  const { data } = await createPublicClient()
+  const { data } = await (await getPublicClient())
     .from("profiles")
     .select("id, account_type, display_name, city, country_code, identity_verified_at, is_demo, created_at, dealer:dealer_profiles(slug, business_name, logo_url, business_verified_at, whatsapp, city, country_code)")
     .eq("id", id)

@@ -49,6 +49,9 @@ export async function fetchProviderRates(id: RateProviderId): Promise<ExchangeRa
   }
 }
 
+// Uses createPublicClient (not getPublicClient): request-time APIs are not allowed
+// inside unstable_cache, and this read never throws — on failure getExchangeRates
+// falls back to the live provider — so it cannot break a build.
 const readStoredRates = unstable_cache(
   async (): Promise<ExchangeRates | null> => {
     const { data, error } = await createPublicClient()

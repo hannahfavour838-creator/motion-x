@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { createClient as createPlainClient, type SupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { isSupabaseConfigured, publicEnv } from "@/lib/env";
 
 /**
@@ -40,4 +41,19 @@ export function createPublicClient(): SupabaseClient {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   return publicClient;
+}
+
+/**
+ * Public client for page and route data. `connection()` defers the work to
+ * request time, so any route that reads the database is rendered per request
+ * instead of being prerendered during `next build`:
+ *   - deployments never depend on the database's state or reachability, and
+ *   - a failing query reaches the route's error boundary for the visitor
+ *     instead of failing the build (or being baked into a cached page).
+ * Preview mode never calls this (callers check isSupabaseConfigured() first),
+ * so demonstration pages stay statically generated.
+ */
+export async function getPublicClient(): Promise<SupabaseClient> {
+  await connection();
+  return createPublicClient();
 }

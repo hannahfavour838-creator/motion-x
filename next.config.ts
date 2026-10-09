@@ -61,6 +61,9 @@ const nextConfig: NextConfig = {
   // The marketplace is session-aware on most routes; we use the classic
   // caching model with explicit revalidation instead of Cache Components.
   cacheComponents: false,
+  // Only overridden by tools/qa/build-live-config.mjs so its test build never
+  // replaces the normal .next output.
+  ...(process.env.MX_DIST_DIR ? { distDir: process.env.MX_DIST_DIR } : {}),
   reactStrictMode: true,
   poweredByHeader: false,
   images: {

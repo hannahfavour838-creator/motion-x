@@ -4,6 +4,7 @@ import Link from "next/link";
 import { COLLECTIONS, collectionHref } from "@/config/vehicles";
 import { ArrowRight } from "@/components/ui/button";
 import { Breadcrumbs } from "@/components/ui/misc";
+import { withFallback } from "@/lib/data/fallback";
 import { searchVehicles } from "@/lib/data/vehicles";
 import { parseFilters } from "@/lib/search-params";
 
@@ -16,7 +17,7 @@ export const revalidate = 300;
 
 export default async function CollectionsPage() {
   const counts = await Promise.all(
-    COLLECTIONS.map((c) => searchVehicles(parseFilters(new URLSearchParams(c.filters))).then((r) => r.total).catch(() => null)),
+    COLLECTIONS.map((c) => withFallback(searchVehicles(parseFilters(new URLSearchParams(c.filters))).then((r): number | null => r.total), null, `collection count (${c.slug})`)),
   );
   return (
     <div className="pb-24 pt-28 md:pt-36">

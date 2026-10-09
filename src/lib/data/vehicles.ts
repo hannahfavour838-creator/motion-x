@@ -4,7 +4,7 @@ import { PAGE_SIZE } from "@/config/site";
 import { POPULAR_MAKES } from "@/config/vehicles";
 import { demoInventoryEnabled, isSupabaseConfigured } from "@/lib/env";
 import { getExchangeRates, toUsd } from "@/lib/rates";
-import { createClient, createPublicClient } from "@/lib/supabase/server";
+import { createClient, getPublicClient } from "@/lib/supabase/server";
 import type { ExchangeRates, SearchFilters, SearchResult, Vehicle } from "@/lib/types";
 import { allDemoVehicles, mapVehicle, VEHICLE_SELECT } from "./mappers";
 
@@ -119,7 +119,7 @@ export async function searchVehicles(filters: SearchFilters): Promise<SearchResu
     };
   }
 
-  const supabase = createPublicClient();
+  const supabase = await getPublicClient();
   const maxKm = filters.maxMileage !== undefined ? Math.round(filters.maxMileage * (filters.mileageUnit === "mi" ? MI_TO_KM : 1)) : null;
   const { data, error } = await supabase.rpc("search_vehicles", {
     p_q: filters.q ?? null,
@@ -186,7 +186,7 @@ export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
       demoSearch({ sort: "newest" }, null).list.filter((v) => !v.featured),
     ).slice(0, limit);
   }
-  let q = createPublicClient().from("vehicles").select(VEHICLE_SELECT).eq("status", "active")
+  let q = (await getPublicClient()).from("vehicles").select(VEHICLE_SELECT).eq("status", "active")
     .order("featured", { ascending: false }).order("published_at", { ascending: false }).limit(limit);
   if (!demoInventoryEnabled()) q = q.eq("is_demo", false);
   const { data, error } = await q;
@@ -200,7 +200,7 @@ export async function getSimilarVehicles(v: Vehicle, limit = 4): Promise<Vehicle
     const rank = (x: Vehicle) => (x.segment === v.segment ? 2 : 0) + (x.bodyStyle === v.bodyStyle ? 1 : 0) + (x.make === v.make ? 1 : 0);
     return all.sort((a, b) => rank(b) - rank(a)).slice(0, limit);
   }
-  let q = createPublicClient().from("vehicles").select(VEHICLE_SELECT).eq("status", "active").neq("id", v.id)
+  let q = (await getPublicClient()).from("vehicles").select(VEHICLE_SELECT).eq("status", "active").neq("id", v.id)
     .or(`segment.eq.${v.segment},body_style.eq.${v.bodyStyle}`).order("published_at", { ascending: false }).limit(limit);
   if (!demoInventoryEnabled()) q = q.eq("is_demo", false);
   const { data } = await q;
@@ -211,7 +211,7 @@ export async function getVehiclesByIds(ids: string[]): Promise<Vehicle[]> {
   const clean = ids.filter((id) => /^[0-9a-f-]{36}$/i.test(id)).slice(0, 4);
   if (!clean.length) return [];
   if (!isSupabaseConfigured()) return orderByIds(allDemoVehicles().filter((v) => clean.includes(v.id)), clean);
-  const { data } = await createPublicClient().from("vehicles").select(VEHICLE_SELECT).in("id", clean);
+  const { data } = await (await getPublicClient()).from("vehicles").select(VEHICLE_SELECT).in("id", clean);
   return orderByIds((data ?? []).map(mapVehicle), clean);
 }
 
@@ -219,7 +219,7 @@ export async function getSellerPublicListings(sellerId: string, limit = 48): Pro
   if (!isSupabaseConfigured()) {
     return allDemoVehicles().filter((v) => v.seller.id === sellerId && v.status === "active").slice(0, limit);
   }
-  const { data } = await createPublicClient().from("vehicles").select(VEHICLE_SELECT)
+  const { data } = await (await getPublicClient()).from("vehicles").select(VEHICLE_SELECT)
     .eq("seller_id", sellerId).in("status", ["active", "sold"]).order("published_at", { ascending: false }).limit(limit);
   return (data ?? []).map(mapVehicle);
 }
@@ -230,7 +230,7 @@ export async function getMakeSuggestions(): Promise<string[]> {
   if (!isSupabaseConfigured()) {
     for (const v of allDemoVehicles()) set.add(v.make);
   } else {
-    const { data } = await createPublicClient().from("vehicles").select("make").eq("status", "active").limit(1000);
+    const { data } = await (await getPublicClient()).from("vehicles").select("make").eq("status", "active").limit(1000);
     for (const r of data ?? []) set.add(r.make);
   }
   return [...set].sort((a, b) => a.localeCompare(b));
@@ -238,7 +238,7 @@ export async function getMakeSuggestions(): Promise<string[]> {
 
 export async function countPublicListings(): Promise<number> {
   if (!isSupabaseConfigured()) return allDemoVehicles().filter((v) => v.status === "active").length;
-  let q = createPublicClient().from("vehicles").select("id", { count: "exact", head: true }).eq("status", "active");
+  let q = (await getPublicClient()).from("vehicles").select("id", { count: "exact", head: true }).eq("status", "active");
   if (!demoInventoryEnabled()) q = q.eq("is_demo", false);
   const { count } = await q;
   return count ?? 0;
@@ -250,7 +250,7 @@ export async function getVehicleCountsByCountry(): Promise<Record<string, number
     for (const v of allDemoVehicles()) if (v.status === "active") counts[v.countryCode] = (counts[v.countryCode] ?? 0) + 1;
     return counts;
   }
-  let q = createPublicClient().from("vehicles").select("country_code").eq("status", "active").limit(5000);
+  let q = (await getPublicClient()).from("vehicles").select("country_code").eq("status", "active").limit(5000);
   if (!demoInventoryEnabled()) q = q.eq("is_demo", false);
   const { data } = await q;
   for (const r of data ?? []) counts[String(r.country_code).trim()] = (counts[String(r.country_code).trim()] ?? 0) + 1;

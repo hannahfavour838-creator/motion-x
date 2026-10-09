@@ -1,6 +1,6 @@
 import "server-only";
 import { isSupabaseConfigured } from "@/lib/env";
-import { createPublicClient } from "@/lib/supabase/server";
+import { getPublicClient } from "@/lib/supabase/server";
 import type { Vehicle3DAsset } from "@/lib/types";
 import { mapAsset } from "./mappers";
 
@@ -34,7 +34,7 @@ export const BUILTIN_ASSETS: Vehicle3DAsset[] = [
 
 export async function listShowroomAssets(): Promise<Vehicle3DAsset[]> {
   if (!isSupabaseConfigured()) return BUILTIN_ASSETS;
-  const { data, error } = await createPublicClient().from("vehicle_3d_assets").select("*").eq("is_published", true).order("created_at");
+  const { data, error } = await (await getPublicClient()).from("vehicle_3d_assets").select("*").eq("is_published", true).order("created_at");
   if (error || !data?.length) return BUILTIN_ASSETS;
   return data.map(mapAsset);
 }

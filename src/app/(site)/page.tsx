@@ -4,6 +4,7 @@ import {
   CollectionsSection, DealersSection, DiscoverySection, FeaturedSection, FinalCta, SellersSection, ShowroomSection, TrustSection,
 } from "@/components/home/sections";
 import { listDealers } from "@/lib/data/dealers";
+import { withFallback } from "@/lib/data/fallback";
 import { getFeaturedVehicles, getMakeSuggestions, getVehicleCountsByCountry } from "@/lib/data/vehicles";
 import { siteConfig } from "@/config/site";
 
@@ -11,10 +12,10 @@ export const revalidate = 300;
 
 export default async function HomePage() {
   const [featured, makes, marketCounts, dealers] = await Promise.all([
-    getFeaturedVehicles(6).catch(() => []),
-    getMakeSuggestions().catch(() => []),
-    getVehicleCountsByCountry().catch(() => ({})),
-    listDealers({ includeDemo: false, limit: 6 }).catch(() => []),
+    withFallback(getFeaturedVehicles(6), [], "homepage featured vehicles"),
+    withFallback(getMakeSuggestions(), [], "homepage make suggestions"),
+    withFallback(getVehicleCountsByCountry(), {}, "homepage market counts"),
+    withFallback(listDealers({ includeDemo: false, limit: 6 }), [], "homepage dealers"),
   ]);
 
   const jsonLd = {

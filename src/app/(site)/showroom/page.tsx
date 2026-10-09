@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ButtonLink } from "@/components/ui/button";
 import { Badge, Breadcrumbs, Eyebrow } from "@/components/ui/misc";
 import { listShowroomAssets } from "@/lib/data/assets";
+import { withFallback } from "@/lib/data/fallback";
 import { searchVehicles } from "@/lib/data/vehicles";
 import { VehicleCard } from "@/components/vehicles/vehicle-card";
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function ShowroomIndex() {
-  const [assets, with3d] = await Promise.all([listShowroomAssets(), searchVehicles({ has3d: true }).catch(() => null)]);
+  const [assets, with3d] = await Promise.all([listShowroomAssets(), withFallback(searchVehicles({ has3d: true }), null, "showroom listings with 3D models")]);
   return (
     <div className="pb-24 pt-28 md:pt-36">
       <div className="container-x">
