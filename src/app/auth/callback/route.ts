@@ -1,11 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { isSupabaseConfigured } from "@/lib/env";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 import { createClient } from "@/lib/supabase/server";
 
-function safeNext(next: string | null): string {
-  return next && next.startsWith("/") && !next.startsWith("//") ? next : "/account";
-}
 
 /**
  * Completes email confirmation, magic-link and password-recovery flows.
@@ -13,7 +11,7 @@ function safeNext(next: string | null): string {
  */
 export async function GET(request: NextRequest) {
   const url = request.nextUrl;
-  const next = safeNext(url.searchParams.get("next"));
+  const next = safeRedirectPath(url.searchParams.get("next"), "/account");
   const fail = new URL("/sign-in?error=link", url.origin);
   if (!isSupabaseConfigured()) return NextResponse.redirect(fail);
 

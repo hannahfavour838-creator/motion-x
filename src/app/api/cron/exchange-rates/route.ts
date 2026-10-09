@@ -1,7 +1,15 @@
+import { createHash, timingSafeEqual } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 import { configuredProvider, fetchProviderRates, RATE_PROVIDERS } from "@/lib/rates";
 import { createServiceClient } from "@/lib/supabase/admin";
+
+/** Constant-time comparison (hashing first gives equal-length buffers). */
+function sameSecret(given: string | null, expected: string): boolean {
+  if (!given) return false;
+  const h = (s: string) => createHash("sha256").update(s).digest();
+  return timingSafeEqual(h(given), h(expected));
+}
 
 /**
  * Daily exchange-rate refresh (see vercel.json). Protected by CRON_SECRET.
@@ -10,7 +18,7 @@ import { createServiceClient } from "@/lib/supabase/admin";
  */
 export async function GET(request: NextRequest) {
   const secret = process.env.CRON_SECRET;
-  if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) {
+  if (!secret || !sameSecret(request.headers.get("authorization"), `Bearer ${secret}`)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const provider = configuredProvider();

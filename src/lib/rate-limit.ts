@@ -12,7 +12,9 @@ const buckets = new Map<string, number[]>();
 
 export async function clientKey(): Promise<string> {
   const h = await headers();
-  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
+  // x-real-ip is set by the platform/proxy from the connection; the leftmost
+  // x-forwarded-for entry can be supplied by the client outside Vercel.
+  const ip = h.get("x-real-ip")?.trim() || h.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const salt = process.env.RATE_LIMIT_SALT || "motion-x";
   return createHash("sha256").update(`${salt}:${ip}`).digest("hex").slice(0, 32);
 }

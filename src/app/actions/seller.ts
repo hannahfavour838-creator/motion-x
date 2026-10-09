@@ -184,11 +184,19 @@ export async function registerImage(vehicleId: string, path: string, meta: { wid
 export async function deleteImage(imageId: string): Promise<ActionResult> {
   const ctx = await sellerContext();
   if (isErr(ctx)) return ctx;
-  const { data: img } = await ctx.supabase.from("vehicle_images").select("id, storage_path, vehicle_id").eq("id", imageId).maybeSingle();
+  if (!/^[0-9a-f-]{36}$/i.test(imageId)) return { ok: false, message: "Photo not found." };
+  // Images of public listings are readable by everyone, so confirm ownership explicitly
+  // rather than relying on RLS silently deleting nothing.
+  const { data: img } = await ctx.supabase
+    .from("vehicle_images")
+    .select("id, storage_path, vehicle_id, vehicle:vehicles!inner(seller_id)")
+    .eq("id", imageId)
+    .eq("vehicle.seller_id", ctx.user.id)
+    .maybeSingle();
   if (!img) return { ok: false, message: "Photo not found." };
-  const { error } = await ctx.supabase.from("vehicle_images").delete().eq("id", imageId);
-  if (error) return { ok: false, message: "We couldn't remove that photo." };
-  if (img.storage_path) await ctx.supabase.storage.from("vehicle-images").remove([img.storage_path]);
+  const { data: removed, error } = await ctx.supabase.from("vehicle_images").delete().eq("id", imageId).select("id");
+  if (error || !removed?.length) return { ok: false, message: "We couldn't remove that photo." };
+  if (img.storage_path?.startsWith(`${ctx.user.id}/`)) await ctx.supabase.storage.from("vehicle-images").remove([img.storage_path]);
   revalidatePath(`/dashboard/listings/${img.vehicle_id}/edit`);
   return { ok: true, message: "Photo removed." };
 }

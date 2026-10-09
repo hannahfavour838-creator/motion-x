@@ -15,7 +15,8 @@
     "renders:jobs": "tsx tools/studio-renderer/jobs.ts > .renders-jobs.json",
     "renders": "npm run renders:jobs && node tools/studio-renderer/render.mjs .renders-jobs.json",
     "test:e2e": "node tools/qa/e2e.mjs",
-    "test:a11y": "node tools/qa/a11y.mjs"
+    "test:a11y": "node tools/qa/a11y.mjs",
+    "test:unit": "tsx tools/qa/unit.ts"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",

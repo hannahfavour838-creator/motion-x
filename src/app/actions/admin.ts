@@ -19,18 +19,23 @@ async function adminContext() {
 }
 
 const DENIED: ActionResult = { ok: false, message: "Administrator access required." };
-const uuid = (s: string) => /^[0-9a-f-]{36}$/i.test(s);
+const uuid = (s: unknown) => typeof s === "string" && /^[0-9a-f-]{36}$/i.test(s);
+/** Server Action arguments come from the client, so enum-like values are re-checked at runtime. */
+const oneOf = <T extends string>(value: unknown, allowed: readonly T[]): value is T => typeof value === "string" && (allowed as readonly string[]).includes(value);
+
+const LISTING_DECISIONS = ["approve", "reject", "suspend", "reinstate", "feature", "unfeature", "inspected", "history_checked", "clear_evidence"] as const;
 
 async function log(supabase: Awaited<ReturnType<typeof createClient>>, actorId: string, target_type: string, target_id: string, action: string, note?: string | null) {
   await supabase.from("moderation_actions").insert({ actor_id: actorId, target_type, target_id, action, note: note || null });
 }
 
-export type ListingDecision = "approve" | "reject" | "suspend" | "reinstate" | "feature" | "unfeature" | "inspected" | "history_checked" | "clear_evidence";
+export type ListingDecision = (typeof LISTING_DECISIONS)[number];
 
 export async function moderateListing(id: string, decision: ListingDecision, note?: string): Promise<ActionResult> {
   const ctx = await adminContext();
   if (!ctx) return DENIED;
   if (!uuid(id)) return { ok: false, message: "Invalid listing." };
+  if (!oneOf(decision, LISTING_DECISIONS)) return { ok: false, message: "Unknown decision." };
   const reason = note?.trim().slice(0, 1000) || null;
   const { data: v } = await ctx.supabase.from("vehicles").select("id, status, approved_at, slug").eq("id", id).maybeSingle();
   if (!v) return { ok: false, message: "Listing not found." };
@@ -82,6 +87,7 @@ export async function resolveReport(id: string, status: "reviewing" | "resolved"
   const ctx = await adminContext();
   if (!ctx) return DENIED;
   if (!uuid(id)) return { ok: false, message: "Invalid report." };
+  if (!oneOf(status, ["reviewing", "resolved", "dismissed"] as const)) return { ok: false, message: "Unknown status." };
   const done = status !== "reviewing";
   const { error } = await ctx.supabase
     .from("listing_reports")
@@ -97,6 +103,7 @@ export async function setAccountStatus(profileId: string, status: "active" | "su
   const ctx = await adminContext();
   if (!ctx) return DENIED;
   if (!uuid(profileId)) return { ok: false, message: "Invalid account." };
+  if (!oneOf(status, ["active", "suspended"] as const)) return { ok: false, message: "Unknown status." };
   if (profileId === ctx.user.id) return { ok: false, message: "You cannot suspend your own account." };
   if (status === "suspended" && !reason?.trim()) return { ok: false, message: "Give a reason for the suspension." };
   const { error } = await ctx.supabase.from("profiles").update({ status, suspended_reason: status === "suspended" ? reason!.trim() : null }).eq("id", profileId);
@@ -109,6 +116,7 @@ export async function setAccountStatus(profileId: string, status: "active" | "su
 export async function revokeIdentityVerification(profileId: string, reason: string): Promise<ActionResult> {
   const ctx = await adminContext();
   if (!ctx) return DENIED;
+  if (!uuid(profileId)) return { ok: false, message: "Invalid account." };
   const { error } = await ctx.supabase.from("profiles").update({ identity_verified_at: null }).eq("id", profileId);
   if (error) return { ok: false, message: "Update failed." };
   await log(ctx.supabase, ctx.user.id, "profile", profileId, "identity_verification_revoked", reason);
@@ -120,6 +128,7 @@ export async function reviewVerification(id: string, decision: "approved" | "rej
   const ctx = await adminContext();
   if (!ctx) return DENIED;
   if (!uuid(id)) return { ok: false, message: "Invalid request." };
+  if (!oneOf(decision, ["approved", "rejected"] as const)) return { ok: false, message: "Unknown decision." };
   if (decision === "rejected" && !note?.trim()) return { ok: false, message: "Tell the applicant why the request was declined." };
   const { error } = await ctx.supabase.from("verification_requests").update({ status: decision, reviewer_note: note?.trim() || null, reviewed_by: ctx.user.id }).eq("id", id).eq("status", "pending");
   if (error) return { ok: false, message: "Update failed." };
@@ -131,6 +140,7 @@ export async function reviewVerification(id: string, decision: "approved" | "rej
 export async function setModerationMode(mode: "required" | "auto"): Promise<ActionResult> {
   const ctx = await adminContext();
   if (!ctx) return DENIED;
+  if (!oneOf(mode, ["required", "auto"] as const)) return { ok: false, message: "Unknown moderation mode." };
   const { error } = await ctx.supabase.from("platform_settings").update({ value: mode, updated_at: new Date().toISOString() }).eq("key", "listing_moderation");
   if (error) return { ok: false, message: "Update failed." };
   revalidatePath("/admin", "layout");
@@ -140,6 +150,7 @@ export async function setModerationMode(mode: "required" | "auto"): Promise<Acti
 export async function markContactHandled(id: string): Promise<ActionResult> {
   const ctx = await adminContext();
   if (!ctx) return DENIED;
+  if (!uuid(id)) return { ok: false, message: "Invalid message." };
   const { error } = await ctx.supabase.from("contact_messages").update({ status: "handled" }).eq("id", id);
   if (error) return { ok: false, message: "Update failed." };
   revalidatePath("/admin/messages");

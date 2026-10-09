@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { isSupabaseConfigured } from "@/lib/env";
 import { rateLimit } from "@/lib/rate-limit";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionResult } from "@/lib/types";
 import { fieldErrors, formObject, signInSchema, signUpSchema } from "@/lib/validation";
@@ -11,11 +12,6 @@ import { z } from "zod";
 
 const NOT_CONFIGURED: ActionResult = { ok: false, message: "Accounts are not available in this preview because Supabase is not configured." };
 
-/** Only allow same-site relative redirects. */
-function safeNext(next: unknown, fallback: string): string {
-  const n = typeof next === "string" ? next : "";
-  return n.startsWith("/") && !n.startsWith("//") && !n.startsWith("/\\") ? n : fallback;
-}
 
 function authMessage(code: string | undefined, message: string | undefined): string {
   const m = (message || "").toLowerCase();
@@ -38,7 +34,7 @@ export async function signIn(_: ActionResult | null, fd: FormData): Promise<Acti
   const { data: profile } = await supabase.from("profiles").select("account_type").eq("id", data.user.id).maybeSingle();
   const { data: isAdmin } = await supabase.rpc("is_admin");
   const fallback = isAdmin ? "/admin" : profile?.account_type && profile.account_type !== "buyer" ? "/dashboard" : "/account";
-  redirect(safeNext(fd.get("next"), fallback));
+  redirect(safeRedirectPath(fd.get("next"), fallback));
 }
 
 export async function signUp(_: ActionResult | null, fd: FormData): Promise<ActionResult> {

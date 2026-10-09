@@ -6,12 +6,13 @@ import { AuthShell } from "@/components/layout/auth-shell";
 import { FormMessage } from "@/components/ui/form";
 import { getSessionUser } from "@/lib/auth";
 import { isSupabaseConfigured } from "@/lib/env";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 export const metadata: Metadata = { title: "Sign in", robots: { index: false } };
 
 export default async function SignInPage({ searchParams }: PageProps<"/sign-in">) {
   const sp = await searchParams;
-  const next = typeof sp.next === "string" && sp.next.startsWith("/") && !sp.next.startsWith("//") ? sp.next : undefined;
+  const next = typeof sp.next === "string" ? safeRedirectPath(sp.next, "") || undefined : undefined;
   const user = await getSessionUser();
   if (user) redirect(next ?? (user.isAdmin ? "/admin" : user.accountType === "buyer" ? "/account" : "/dashboard"));
   return (

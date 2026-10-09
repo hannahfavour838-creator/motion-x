@@ -23,6 +23,8 @@ Without Supabase credentials the app runs in **preview mode**: the marketplace, 
 | `npm run lint` · `npm run typecheck` | ESLint · TypeScript |
 | `npm run db:test` | Applies all migrations + seed to a throwaway local PostgreSQL and runs the security test suite |
 | `npm run test:e2e` | Playwright end-to-end tests (`BASE_URL=http://localhost:3000`; set `CHROMIUM_PATH` if needed) |
+| `npm run test:unit` | Unit tests for security helpers (safe redirects) |
+| `npm run test:a11y` | axe-core WCAG 2.1 A/AA audit of public pages at desktop and mobile widths (`BASE_URL`, `CHROMIUM_PATH`) |
 | `npm run seed:generate` | Regenerates `supabase/seed.sql` from the demo inventory |
 | `npm run admin:grant -- you@example.com` | Grants admin rights (needs the service-role key) |
 | `npm run photos` | Downloads the demo-listing photographs listed in `tools/photos/manifest.mjs` from Wikimedia Commons, blurs plates, crops and writes WebP + credits |
