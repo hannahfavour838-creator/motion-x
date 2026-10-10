@@ -6,6 +6,8 @@ import { demoInventoryEnabled, isSupabaseConfigured } from "@/lib/env";
 import { getExchangeRates, toUsd } from "@/lib/rates";
 import { createClient, getPublicClient } from "@/lib/supabase/server";
 import type { ExchangeRates, SearchFilters, SearchResult, Vehicle } from "@/lib/types";
+import { isDemoSellerId, isDemoVehicleId } from "@/lib/demo-mode";
+import { builtInDemoActive } from "./demo-fallback";
 import { allDemoVehicles, mapVehicle, VEHICLE_SELECT } from "./mappers";
 
 const MI_TO_KM = 1.609344;
@@ -108,7 +110,7 @@ export async function searchVehicles(filters: SearchFilters): Promise<SearchResu
   const rates = ratesInfo?.rates ?? null;
   const limited = priceFilterLimited(filters, rates);
 
-  if (!isSupabaseConfigured()) {
+  if (await builtInDemoActive()) {
     const { list } = demoSearch(filters, rates);
     return {
       vehicles: list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
@@ -171,7 +173,10 @@ export async function searchVehicles(filters: SearchFilters): Promise<SearchResu
  */
 export const getVehicleBySlug = cache(async (slug: string): Promise<Vehicle | null> => {
   if (!/^[a-z0-9-]{3,200}$/.test(slug)) return null;
-  if (!isSupabaseConfigured()) return allDemoVehicles().find((v) => v.slug === slug) ?? null;
+  if (await builtInDemoActive()) {
+    const demo = allDemoVehicles().find((v) => v.slug === slug);
+    if (demo || !isSupabaseConfigured()) return demo ?? null;
+  }
   const supabase = await createClient();
   const { data, error } = await supabase.from("vehicles").select(VEHICLE_SELECT).eq("slug", slug).maybeSingle();
   if (error || !data) return null;
@@ -181,7 +186,7 @@ export const getVehicleBySlug = cache(async (slug: string): Promise<Vehicle | nu
 });
 
 export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
-  if (!isSupabaseConfigured()) {
+  if (await builtInDemoActive()) {
     return demoSearch({ sort: "relevance" }, null).list.filter((v) => v.featured).concat(
       demoSearch({ sort: "newest" }, null).list.filter((v) => !v.featured),
     ).slice(0, limit);
@@ -195,7 +200,7 @@ export async function getFeaturedVehicles(limit = 6): Promise<Vehicle[]> {
 }
 
 export async function getSimilarVehicles(v: Vehicle, limit = 4): Promise<Vehicle[]> {
-  if (!isSupabaseConfigured()) {
+  if (await builtInDemoActive()) {
     const all = allDemoVehicles().filter((x) => x.id !== v.id && x.status === "active");
     const rank = (x: Vehicle) => (x.segment === v.segment ? 2 : 0) + (x.bodyStyle === v.bodyStyle ? 1 : 0) + (x.make === v.make ? 1 : 0);
     return all.sort((a, b) => rank(b) - rank(a)).slice(0, limit);
@@ -210,13 +215,15 @@ export async function getSimilarVehicles(v: Vehicle, limit = 4): Promise<Vehicle
 export async function getVehiclesByIds(ids: string[]): Promise<Vehicle[]> {
   const clean = ids.filter((id) => /^[0-9a-f-]{36}$/i.test(id)).slice(0, 4);
   if (!clean.length) return [];
-  if (!isSupabaseConfigured()) return orderByIds(allDemoVehicles().filter((v) => clean.includes(v.id)), clean);
+  if (await builtInDemoActive()) {
+    if (!isSupabaseConfigured() || clean.every(isDemoVehicleId)) return orderByIds(allDemoVehicles().filter((v) => clean.includes(v.id)), clean);
+  }
   const { data } = await (await getPublicClient()).from("vehicles").select(VEHICLE_SELECT).in("id", clean);
   return orderByIds((data ?? []).map(mapVehicle), clean);
 }
 
 export async function getSellerPublicListings(sellerId: string, limit = 48): Promise<Vehicle[]> {
-  if (!isSupabaseConfigured()) {
+  if ((await builtInDemoActive()) && (!isSupabaseConfigured() || isDemoSellerId(sellerId))) {
     return allDemoVehicles().filter((v) => v.seller.id === sellerId && v.status === "active").slice(0, limit);
   }
   const { data } = await (await getPublicClient()).from("vehicles").select(VEHICLE_SELECT)
@@ -227,7 +234,7 @@ export async function getSellerPublicListings(sellerId: string, limit = 48): Pro
 /** Makes present in public inventory, merged with a suggestion list. */
 export async function getMakeSuggestions(): Promise<string[]> {
   const set = new Set<string>(POPULAR_MAKES);
-  if (!isSupabaseConfigured()) {
+  if (await builtInDemoActive()) {
     for (const v of allDemoVehicles()) set.add(v.make);
   } else {
     const { data } = await (await getPublicClient()).from("vehicles").select("make").eq("status", "active").limit(1000);
@@ -237,7 +244,7 @@ export async function getMakeSuggestions(): Promise<string[]> {
 }
 
 export async function countPublicListings(): Promise<number> {
-  if (!isSupabaseConfigured()) return allDemoVehicles().filter((v) => v.status === "active").length;
+  if (await builtInDemoActive()) return allDemoVehicles().filter((v) => v.status === "active").length;
   let q = (await getPublicClient()).from("vehicles").select("id", { count: "exact", head: true }).eq("status", "active");
   if (!demoInventoryEnabled()) q = q.eq("is_demo", false);
   const { count } = await q;
@@ -246,7 +253,7 @@ export async function countPublicListings(): Promise<number> {
 
 export async function getVehicleCountsByCountry(): Promise<Record<string, number>> {
   const counts: Record<string, number> = {};
-  if (!isSupabaseConfigured()) {
+  if (await builtInDemoActive()) {
     for (const v of allDemoVehicles()) if (v.status === "active") counts[v.countryCode] = (counts[v.countryCode] ?? 0) + 1;
     return counts;
   }

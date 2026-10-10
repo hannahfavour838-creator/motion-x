@@ -21,6 +21,8 @@ export function SaveButton({ vehicleId, className, variant = "icon" }: { vehicle
       router.push(`/sign-in?next=${encodeURIComponent(window.location.pathname)}`);
     } else if (result === "unavailable") {
       toast(configured ? "Saving is unavailable right now." : "Saving requires accounts, which are not configured in this preview.", "info");
+    } else if (result === "demo") {
+      toast("This is a demonstration listing, so it can't be saved. Real listings can be saved to your garage.", "info");
     } else if (result === "error") {
       toast("We couldn't update your saved vehicles. Please try again.", "error");
     } else {

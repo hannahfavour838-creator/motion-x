@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { isDemoVehicleId } from "@/lib/demo-mode";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { ToastProvider } from "@/components/ui/toast";
 import type { ExchangeRates } from "@/lib/types";
@@ -70,7 +71,7 @@ export function useSession() {
 // ── Favourites ─────────────────────────────────────────────────────────────
 interface FavouritesState {
   ids: Set<string>;
-  toggle: (vehicleId: string) => Promise<"added" | "removed" | "auth" | "error" | "unavailable">;
+  toggle: (vehicleId: string) => Promise<"added" | "removed" | "auth" | "error" | "unavailable" | "demo">;
 }
 const FavouritesContext = createContext<FavouritesState>({ ids: new Set(), toggle: async () => "unavailable" });
 
@@ -96,6 +97,7 @@ function FavouritesProvider({ children }: { children: ReactNode }) {
 
   const toggle = useCallback<FavouritesState["toggle"]>(async (vehicleId) => {
     if (!supabase) return "unavailable";
+    if (isDemoVehicleId(vehicleId)) return "demo"; // fictional listing — nothing to save in the database
     if (!session) return "auth";
     const has = ids.has(vehicleId);
     setIds((prev) => {

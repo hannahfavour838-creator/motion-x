@@ -2,6 +2,8 @@
 import { safeRedirectPath } from "../../src/lib/safe-redirect";
 import { RATE_LIMITED_ANONYMOUS, RATE_LIMITED_SIGNED_IN, submissionErrorMessage } from "../../src/lib/submission-errors";
 import { classifyUploadStartFailure, UPLOAD_START_MESSAGES, uploadTransferMessage } from "../../src/lib/upload-errors";
+import { isDemoDealerSlug, isDemoSellerId, isDemoVehicleId, shouldUseBuiltInDemo } from "../../src/lib/demo-mode";
+import { DEMO_SELLERS, DEMO_VEHICLES } from "../../src/lib/demo/inventory";
 
 let fail = 0;
 let total = 0;
@@ -94,6 +96,23 @@ for (const [status, want] of transferCases) {
   const got = uploadTransferMessage(status, 10);
   check("upload-transfer", `HTTP ${status}`, want.test(got) && !got.includes(`(${status})`), `→ ${JSON.stringify(got)}`);
 }
+
+// ── Built-in demo inventory fallback ────────────────────────────────────
+const demoCases: [Parameters<typeof shouldUseBuiltInDemo>[0], boolean, string][] = [
+  [{ supabaseConfigured: false, demoFlag: false, nodeEnv: "production", publicVehicleCount: null }, true, "preview mode (no Supabase) always uses demo data"],
+  [{ supabaseConfigured: true, demoFlag: true, nodeEnv: "development", publicVehicleCount: 0 }, true, "dev + flag + empty database → demo fallback"],
+  [{ supabaseConfigured: true, demoFlag: true, nodeEnv: "production", publicVehicleCount: 0 }, false, "PRODUCTION never uses the fallback, even with the flag on"],
+  [{ supabaseConfigured: true, demoFlag: true, nodeEnv: "test", publicVehicleCount: 0 }, false, "non-development environments never use the fallback"],
+  [{ supabaseConfigured: true, demoFlag: false, nodeEnv: "development", publicVehicleCount: 0 }, false, "flag off → database only"],
+  [{ supabaseConfigured: true, demoFlag: true, nodeEnv: "development", publicVehicleCount: 1 }, false, "one real public listing → database takes over"],
+  [{ supabaseConfigured: true, demoFlag: true, nodeEnv: "development", publicVehicleCount: null }, false, "unknown count → database (never guess)"],
+];
+for (const [input, want, label] of demoCases) check("demo-fallback", label, shouldUseBuiltInDemo(input) === want);
+check("demo-fallback", "every built-in vehicle id is recognised as demo", DEMO_VEHICLES.every((v) => isDemoVehicleId(v.id)));
+check("demo-fallback", "every built-in seller id is recognised as demo", DEMO_SELLERS.every((x) => isDemoSellerId(x.id)));
+check("demo-fallback", "every built-in dealer slug is recognised as demo", DEMO_SELLERS.filter((x) => x.slug).every((x) => isDemoDealerSlug(x.slug!)));
+check("demo-fallback", "a random real UUID is not treated as demo", !isDemoVehicleId("3f2b8c1e-9a4d-4e7b-8c2a-1d5e6f7a8b9c") && !isDemoSellerId("3f2b8c1e-9a4d-4e7b-8c2a-1d5e6f7a8b9c"));
+check("demo-fallback", "a real dealer slug is not treated as demo", !isDemoDealerSlug("northline-motors-ab12"));
 
 console.log(fail ? `\n${fail} of ${total} FAILED` : `\nall ${total} unit cases pass`);
 process.exitCode = fail ? 1 : 0;
