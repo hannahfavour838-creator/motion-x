@@ -39,6 +39,14 @@ Also needs `SUPABASE_SERVICE_ROLE_KEY` (above).
 | `EXCHANGE_RATES_PROVIDER` | `open-er-api` (includes AED) or `frankfurter` | No |
 | `CRON_SECRET` | A long random string; Vercel Cron sends it automatically | **Yes** |
 
+### Public demo mode (optional)
+
+| Variable | Value | Exposed to browser? |
+|---|---|---|
+| `SHOW_PUBLIC_DEMO_INVENTORY` | `true` to show the built-in demonstration vehicles while the database has **no** public listings (e.g. a portfolio deployment). Anything else, or unset, = off. | No (server-only) |
+
+Demo vehicles are never written to the database, are labelled "Demo vehicle" / "Demonstration listing" everywhere, are excluded from search-engine indexing and the sitemap, and cannot receive enquiries, inspection requests, reports or saves. As soon as one real listing is public, the site shows real inventory only. Remove the variable (and redeploy) to switch the mode off.
+
 ### Optional
 
 `NEXT_PUBLIC_CONTACT_EMAIL`, `NEXT_PUBLIC_DISPLAY_CURRENCIES` (default `USD,EUR,GBP,AED`),

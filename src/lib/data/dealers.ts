@@ -4,7 +4,7 @@ import { getPublicClient } from "@/lib/supabase/server";
 import { DEMO_SELLERS } from "@/lib/demo/inventory";
 import type { DealerProfile, SellerSummary } from "@/lib/types";
 import { isDemoDealerSlug, isDemoSellerId } from "@/lib/demo-mode";
-import { builtInDemoActive } from "./demo-fallback";
+import { builtInDemoActive, demoRecordsAllowed } from "./demo-fallback";
 import { allDemoVehicles, demoSellerSummary, mapDealer, mapSeller } from "./mappers";
 
 function demoDealers(): DealerProfile[] {
@@ -35,7 +35,7 @@ function demoDealers(): DealerProfile[] {
  * appear; the homepage passes false so only genuine dealers are showcased.
  */
 export async function listDealers({ includeDemo = false, limit = 48 } = {}): Promise<DealerProfile[]> {
-  if (await builtInDemoActive()) return includeDemo && demoInventoryEnabled() ? demoDealers().slice(0, limit) : [];
+  if (await builtInDemoActive()) return includeDemo && demoRecordsAllowed() ? demoDealers().slice(0, limit) : [];
   const supabase = await getPublicClient();
   const { data, error } = await supabase
     .from("dealer_profiles")
@@ -58,7 +58,7 @@ export async function listDealers({ includeDemo = false, limit = 48 } = {}): Pro
 export async function getDealerBySlug(slug: string): Promise<DealerProfile | null> {
   if (!/^[a-z0-9-]{2,120}$/.test(slug)) return null;
   if ((await builtInDemoActive()) && (!isSupabaseConfigured() || isDemoDealerSlug(slug))) {
-    return demoInventoryEnabled() ? demoDealers().find((d) => d.slug === slug) ?? null : null;
+    return demoRecordsAllowed() ? demoDealers().find((d) => d.slug === slug) ?? null : null;
   }
   const supabase = await getPublicClient();
   const { data } = await supabase

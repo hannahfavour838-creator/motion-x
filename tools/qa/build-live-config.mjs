@@ -20,6 +20,7 @@ const env = {
   NEXT_PUBLIC_SUPABASE_ANON_KEY: "",
   SUPABASE_SERVICE_ROLE_KEY: "",
   SUPABASE_SECRET_KEY: "",
+  SHOW_PUBLIC_DEMO_INVENTORY: "",
   MX_DIST_DIR: DIST,
 };
 let failures = 0;
@@ -81,6 +82,29 @@ if (build.status === 0) {
   } finally {
     if (process.platform === "win32") spawnSync("taskkill", ["/pid", String(server.pid), "/t", "/f"], { stdio: "ignore" });
     else server.kill("SIGTERM");
+  }
+
+  // 3. Public demo mode ON + database unavailable: the failure must surface, never demo cars.
+  const demoPort = PORT + 1;
+  const demoServer = spawn("npx", ["next", "start", "-p", String(demoPort)], {
+    env: { ...env, SHOW_PUBLIC_DEMO_INVENTORY: "true" }, shell: true, stdio: "ignore",
+  });
+  try {
+    const demoBase = `http://localhost:${demoPort}`;
+    for (let i = 0; i < 60; i++) {
+      try { await fetch(`${demoBase}/about`); break; } catch { await new Promise((r) => setTimeout(r, 1000)); }
+    }
+    const cars = await fetch(`${demoBase}/cars`);
+    const body = await cars.text();
+    // /cars has a loading.tsx, so the response streams with 200 before the error
+    // is raised; the error boundary ("We couldn't load vehicles") is delivered in
+    // the stream and identified by its error digest.
+    check(/\\?"digest\\?":/.test(body), "public demo mode: a database failure on /cars reaches the error boundary", `[HTTP ${cars.status}]`);
+    check(!body.includes("Demo vehicle") && !body.includes("Demonstration inventory"), "public demo mode: no demo vehicles are shown when the database check fails");
+    check(!body.includes("No vehicles found"), "public demo mode: the failure is not disguised as an empty result");
+  } finally {
+    if (process.platform === "win32") spawnSync("taskkill", ["/pid", String(demoServer.pid), "/t", "/f"], { stdio: "ignore" });
+    else demoServer.kill("SIGTERM");
   }
 }
 

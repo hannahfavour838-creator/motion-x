@@ -38,6 +38,9 @@ function warnAboutProductionConfig() {
   if ((hasUrl || hasKey) && !process.env.SUPABASE_SERVICE_ROLE_KEY && !process.env.SUPABASE_SECRET_KEY) warnings.push("SUPABASE_SERVICE_ROLE_KEY is not set — listing view statistics and exchange-rate refresh are disabled.");
   if (!process.env.RATE_LIMIT_SALT) warnings.push("RATE_LIMIT_SALT is not set — visitor IP hashes use a public default salt.");
   for (const w of warnings) console.warn(`⚠ MOTION X config: ${w}`);
+  if (process.env.SHOW_PUBLIC_DEMO_INVENTORY === "true") {
+    console.info("ℹ MOTION X config: SHOW_PUBLIC_DEMO_INVENTORY=true — labelled demonstration vehicles are shown while the database has no public listings.");
+  }
 }
 warnAboutProductionConfig();
 

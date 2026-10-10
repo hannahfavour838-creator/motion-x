@@ -2,8 +2,10 @@
 import { safeRedirectPath } from "../../src/lib/safe-redirect";
 import { RATE_LIMITED_ANONYMOUS, RATE_LIMITED_SIGNED_IN, submissionErrorMessage } from "../../src/lib/submission-errors";
 import { classifyUploadStartFailure, UPLOAD_START_MESSAGES, uploadTransferMessage } from "../../src/lib/upload-errors";
-import { isDemoDealerSlug, isDemoSellerId, isDemoVehicleId, shouldUseBuiltInDemo } from "../../src/lib/demo-mode";
+import { readFileSync } from "node:fs";
+import { isDemoDealerSlug, isDemoSellerId, isDemoVehicleId, publicDemoFlagFrom, shouldUseBuiltInDemo } from "../../src/lib/demo-mode";
 import { DEMO_SELLERS, DEMO_VEHICLES } from "../../src/lib/demo/inventory";
+import { allDemoVehicles } from "../../src/lib/data/mappers";
 
 let fail = 0;
 let total = 0;
@@ -113,6 +115,51 @@ check("demo-fallback", "every built-in seller id is recognised as demo", DEMO_SE
 check("demo-fallback", "every built-in dealer slug is recognised as demo", DEMO_SELLERS.filter((x) => x.slug).every((x) => isDemoDealerSlug(x.slug!)));
 check("demo-fallback", "a random real UUID is not treated as demo", !isDemoVehicleId("3f2b8c1e-9a4d-4e7b-8c2a-1d5e6f7a8b9c") && !isDemoSellerId("3f2b8c1e-9a4d-4e7b-8c2a-1d5e6f7a8b9c"));
 check("demo-fallback", "a real dealer slug is not treated as demo", !isDemoDealerSlug("northline-motors-ab12"));
+
+// ── Public demo mode (SHOW_PUBLIC_DEMO_INVENTORY) ───────────────────────
+const prod = { supabaseConfigured: true, demoFlag: false, nodeEnv: "production" } as const;
+check("public-demo", "production: OFF by default (variable unset)", shouldUseBuiltInDemo({ ...prod, publicVehicleCount: 0 }) === false);
+check("public-demo", "production: ON when explicitly enabled and no real listings", shouldUseBuiltInDemo({ ...prod, publicDemoFlag: true, publicVehicleCount: 0 }) === true);
+check("public-demo", "production: real listings take priority (1 listing → database only)", shouldUseBuiltInDemo({ ...prod, publicDemoFlag: true, publicVehicleCount: 1 }) === false);
+check("public-demo", "production: failed/unknown count never activates demo data", shouldUseBuiltInDemo({ ...prod, publicDemoFlag: true, publicVehicleCount: null }) === false);
+check("public-demo", "development fallback unchanged when public mode is off", shouldUseBuiltInDemo({ supabaseConfigured: true, demoFlag: true, nodeEnv: "development", publicVehicleCount: 0 }) === true);
+for (const [value, want] of [[undefined, false], ["", false], ["false", false], ["TRUE", false], ["1", false], ["yes", false], ["true", true]] as const) {
+  check("public-demo", `SHOW_PUBLIC_DEMO_INVENTORY=${JSON.stringify(value)} → ${want ? "on" : "off"}`, publicDemoFlagFrom(value) === want);
+}
+
+// Every demo vehicle is labelled and visibly fictional
+const demos = allDemoVehicles();
+check("demo-labels", `all ${demos.length} built-in vehicles are flagged isDemo (drives "Demo vehicle" badges and banners)`, demos.length > 0 && demos.every((v) => v.isDemo));
+check("demo-labels", "all demo sellers are flagged as demonstration sellers", demos.every((v) => v.seller.isDemo));
+check("demo-labels", "every demo description states it is a demonstration listing, not for sale", demos.every((v) => /demonstration listing/i.test(v.description ?? "") && /not a real vehicle for sale/i.test(v.description ?? "")));
+check("demo-labels", "every demo photo is marked as representative (not the vehicle listed)", demos.every((v) => v.images.length > 0 && v.images.every((i) => i.illustrative)));
+const read = (p: string) => readFileSync(new URL(`../../${p}`, import.meta.url), "utf8");
+check("demo-labels", 'vehicle cards render a "Demo vehicle" badge for demo listings', /v\.isDemo && <Badge[^>]*>Demo vehicle<\/Badge>/.test(read("src/components/vehicles/vehicle-card.tsx")));
+check("demo-labels", 'vehicle pages render a "Demonstration listing" notice for demo listings', /v\.isDemo && \([\s\S]{0,300}Demonstration listing/.test(read("src/app/(site)/cars/[slug]/page.tsx")));
+check("demo-labels", "demo vehicle pages are excluded from search-engine indexing", /robots: v\.isDemo \|\| !isPublic \? \{ index: false/.test(read("src/app/(site)/cars/[slug]/page.tsx")));
+
+// Demo vehicles can never trigger real enquiries, inspections, reports, saves or views
+const actions = read("src/app/actions/public.ts");
+/** Source of one exported function: from its declaration up to the next exported function (or end of file). */
+const fnBody = (src: string, name: string) => {
+  const start = src.indexOf(`export async function ${name}(`);
+  const next = src.indexOf("\nexport async function", start + 1);
+  return src.slice(start, next === -1 ? undefined : next);
+};
+for (const fn of ["submitEnquiry", "requestInspection", "reportListing"]) {
+  const body = fnBody(actions, fn);
+  const guard = body.indexOf("isDemoVehicle("), db = body.indexOf("createClient(");
+  check("demo-guards", `${fn}: refuses demo vehicles before any database call`, guard > 0 && db > guard);
+}
+const view = fnBody(actions, "recordView");
+check("demo-guards", "recordView: skips demo vehicles before the database", view.indexOf("isDemoVehicleId(") > 0 && view.indexOf("isDemoVehicleId(") < view.indexOf("createServiceClient("));
+const providers = read("src/components/providers/app-providers.tsx");
+check("demo-guards", "saving a demo vehicle returns before any database write", providers.indexOf('if (isDemoVehicleId(vehicleId)) return "demo"') > 0 && providers.indexOf('if (isDemoVehicleId(vehicleId)) return "demo"') < providers.indexOf('.from("favourites").insert'));
+check("demo-guards", "every built-in demo id is caught by the guards", DEMO_VEHICLES.every((v) => isDemoVehicleId(v.id)));
+
+// Database failures are not hidden behind demo data
+const fallbackSrc = read("src/lib/data/demo-fallback.ts");
+check("demo-errors", "a failing listing count throws instead of falling back to demo data", /if \(error\) throw new Error\(`Inventory check failed/.test(fallbackSrc));
 
 console.log(fail ? `\n${fail} of ${total} FAILED` : `\nall ${total} unit cases pass`);
 process.exitCode = fail ? 1 : 0;

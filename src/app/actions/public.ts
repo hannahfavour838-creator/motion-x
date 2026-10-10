@@ -4,6 +4,7 @@ import { isSupabaseConfigured } from "@/lib/env";
 import { looksAutomated, rateLimit } from "@/lib/rate-limit";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { isDemoVehicleId } from "@/lib/demo-mode";
 import { submissionErrorMessage } from "@/lib/submission-errors";
 import type { ActionResult } from "@/lib/types";
 import { contactSchema, enquirySchema, fieldErrors, formObject, inspectionSchema, reportSchema } from "@/lib/validation";
@@ -24,8 +25,9 @@ function dbError(message: string | undefined, fallback: string, signedIn: boolea
   return { ok: false, message: submissionErrorMessage(message, fallback, signedIn) };
 }
 
+/** Demonstration vehicles are fictional: no enquiries, inspections or reports. Checked before any database call. */
 async function isDemoVehicle(vehicleId: string): Promise<boolean> {
-  return vehicleId.startsWith("d0000000-");
+  return isDemoVehicleId(vehicleId);
 }
 
 export async function submitEnquiry(_: ActionResult | null, fd: FormData): Promise<ActionResult> {
@@ -122,7 +124,7 @@ export async function sendContactMessage(_: ActionResult | null, fd: FormData): 
  * key, views are simply not recorded.
  */
 export async function recordView(vehicleId: string): Promise<void> {
-  if (!isSupabaseConfigured() || !/^[0-9a-f-]{36}$/i.test(vehicleId) || vehicleId.startsWith("d0000000-")) return;
+  if (!isSupabaseConfigured() || !/^[0-9a-f-]{36}$/i.test(vehicleId) || isDemoVehicleId(vehicleId)) return;
   if (!(await rateLimit("view", 120, 60 * 60 * 1000))) return;
   const service = createServiceClient();
   if (!service) return;

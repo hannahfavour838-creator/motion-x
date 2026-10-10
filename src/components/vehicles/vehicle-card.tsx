@@ -30,7 +30,7 @@ export function VehicleCard({ vehicle: v, priority = false, className }: { vehic
         )}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/80 to-transparent" />
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-          {v.isDemo && <Badge tone="warning" className="bg-obsidian/80 backdrop-blur">Demo listing</Badge>}
+          {v.isDemo && <Badge tone="warning" className="bg-obsidian/80 backdrop-blur">Demo vehicle</Badge>}
           {v.status === "sold" && <Badge tone="danger" className="bg-obsidian/80 backdrop-blur">Sold</Badge>}
           {v.condition === "new" && <Badge tone="electric" className="bg-obsidian/80 backdrop-blur">New</Badge>}
         </div>
